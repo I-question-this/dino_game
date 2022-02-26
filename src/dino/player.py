@@ -1,5 +1,6 @@
 import pygame
 from dino.assets import DINO_DOUX
+from dino.spritesheet import SpriteSheet
 
 
 # TODO: Move constants to seperate file that is imported into each file.
@@ -10,50 +11,6 @@ BLACK = (0, 0, 0)
 # Screen dimensions
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-
-
-class SpriteSheetOld():
-    def __init__(self, image):
-        self.sheet = image
-    
-    def get_image(self, frame, width, height, scale, colour):
-        image = pygame.Surface((width, height)).convert_alpha() # Convert alpha gives per-pixel transparancy to png images
-        image.blit(self.sheet, (0, 0), ((frame * width), 0, width, height))
-        image = pygame.transform.scale(image, (width * scale, height * scale))
-        image.set_colorkey(colour)
-        return image
-
-class SpriteSheet():
-    """ Class used to grab images out of a sprite sheet. """
- 
-    def __init__(self, file_name):
-        """ Constructor. Pass in the file name of the sprite sheet. """
- 
-        # Load the sprite sheet.
-        self.sprite_sheet = pygame.image.load(file_name).convert_alpha()
- 
- 
-    def get_image(self, x, y, width, height):
-        """ Grab a single image out of a larger spritesheet
-            Pass in the x, y location of the sprite
-            and the width and height of the sprite. """
- 
-        # Create a new blank image
-        image = pygame.Surface([width, height]).convert()
- 
-        # Copy the sprite from the large sheet onto the smaller image
-        image.blit(self.sprite_sheet, (0, 0), (x, y, width, height))
- 
-        # Assuming black works as the transparent color
-        image.set_colorkey(BLACK)
- 
-        # Return the image
-        return image
-
-    def transform_image(self, image):
-        image = pygame.transform.scale(image, (72,72))
-        return image
-
 
 class Player(pygame.sprite.Sprite):
     """ This class represents the bar at the bottom that the player
@@ -71,13 +28,6 @@ class Player(pygame.sprite.Sprite):
         width = 40
         height = 60
 
-        """
-        self.image = pygame.Surface([width, height])
-        self.image.fill(RED)
-
-        # Set a referance to the image rect.
-        self.rect = self.image.get_rect()
-        """
         # Set speed vector of player
         self.change_x = 0
         self.change_y = 0
@@ -91,14 +41,16 @@ class Player(pygame.sprite.Sprite):
         self.level = None
 
         # List of all the frames for the little dino
-        # Load the sprite sheet image and extract images
+        # Load the sprite sheet image and extract images; (x, y, width, height)
         sprite_sheet = SpriteSheet(DINO_DOUX)
-        self.frames = [sprite_sheet.get_image(4, 4, 16, 18),
-                sprite_sheet.get_image(28, 4, 16, 18)]
-        self.frame_number = 0
-
-        for i in range(len(self.frames)):
-            self.frames[i] = sprite_sheet.transform_image(self.frames[i])
+        self.frames = []
+        for i in range(0, 11):
+            # Get the image from the sprite sheet
+            image = sprite_sheet.get_image((i*24)+4, 4, 15, 18)
+            # Scale the image up
+            image = sprite_sheet.transform_image(image)
+            # Add the image to the list of frames
+            self.frames.append(image)
 
         # Set the image the player starts with
         self.image = self.frames[0]
