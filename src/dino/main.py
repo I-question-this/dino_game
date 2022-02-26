@@ -20,6 +20,7 @@ http://programarcadegames.com/python_examples/sprite_sheets/
 
 import pygame
 from dino.player import Player
+from dino.world import World
 
 # Global constants
 
@@ -33,9 +34,11 @@ BLUE = (0, 0, 255)
 # Screen dimensions
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-
-
-
+BOUNDARY_WIDTH = 700
+BOUNDARY_HEIGHT = 500
+BOUNDARY_RECT = pygame.Rect((SCREEN_WIDTH-BOUNDARY_WIDTH)//2,
+                            (SCREEN_HEIGHT-BOUNDARY_HEIGHT)//2,
+                            BOUNDARY_WIDTH, BOUNDARY_HEIGHT)
 
 
 class Platform(pygame.sprite.Sprite):
@@ -86,14 +89,14 @@ class Level(object):
 
 
 # Create platforms for the level
-class Level_01(Level):
+class Level_01(World):
     """ Definition for level 1. """
 
     def __init__(self, player):
         """ Create level 1. """
 
         # Call the parent constructor
-        Level.__init__(self, player)
+        World.__init__(self, player)
 
         # Array with width, height, x, and y of platform
         level = [[210, 70, 500, 500],
@@ -108,9 +111,6 @@ class Level_01(Level):
             # These should be part of the Platfrom __init__
             block.rect.x = platform[2]
             block.rect.y = platform[3]
-            # Why does this exist? It is not used, and should not
-            # be done this way?
-            block.player = self.player
             self.platform_list.add(block)
 
 
@@ -129,7 +129,7 @@ def main():
 
     # Create all the levels
     level_list = []
-    level_list.append( Level_01(player) )
+    level_list.append( Level_01(BOUNDARY_RECT) )
 
     # Set the current level
     current_level_no = 0
@@ -174,15 +174,7 @@ def main():
         active_sprite_list.update()
 
         # Update items in the level
-        current_level.update()
-
-        # If the player gets near the right side, shift the world left (-x)
-        if player.rect.right > SCREEN_WIDTH:
-            player.rect.right = SCREEN_WIDTH
-
-        # If the player gets near the left side, shift the world right (+x)
-        if player.rect.left < 0:
-            player.rect.left = 0
+        current_level.update(player)
 
         # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
         current_level.draw(screen)
