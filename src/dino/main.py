@@ -41,8 +41,8 @@ VIEW_HEIGHT = 500
 VIEW_RECT = pygame.Rect((SCREEN_WIDTH-VIEW_WIDTH)//2,
                             (SCREEN_HEIGHT-VIEW_HEIGHT)//2,
                             VIEW_WIDTH, VIEW_HEIGHT)
-TILE_WIDTH = 36
-TILE_HEIGHT = 36
+TILE_WIDTH = 48
+TILE_HEIGHT = 48
 
 def main():
     """ Main Program """
