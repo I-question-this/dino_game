@@ -1,5 +1,6 @@
 import pygame
 from dino.assets import DINO_DOUX
+from dino.blocks.death import DeathBlock
 from dino.spritesheet import SpriteSheet
 
 
@@ -13,6 +14,9 @@ class Player(pygame.sprite.Sprite):
 
         # Call the parent's constructor
         super().__init__()
+
+        # Set death status
+        self.dead = False
 
         # Set speed vector of player
         self.change_x = 0
@@ -46,7 +50,11 @@ class Player(pygame.sprite.Sprite):
         self.state = 'Idle' # Options Jumping, Walking, Idle
         self.frame_number = 0
 
-        
+
+    def revive(self):
+        self.dead = False
+        self.double_jump_available = True
+
 
     def update(self, level):
         """ Move the player. """
@@ -65,6 +73,9 @@ class Player(pygame.sprite.Sprite):
         # See if we hit anything
         block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
         for block in block_hit_list:
+            if isinstance(block, DeathBlock):
+                self.dead = True
+
             # If we are moving right,
             # set our right side to the left side of the item we hit
             if self.change_x > 0:
@@ -79,6 +90,8 @@ class Player(pygame.sprite.Sprite):
         # Check and see if we hit anything
         block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
         for block in block_hit_list:
+            if isinstance(block, DeathBlock):
+                self.dead = True
 
             # Reset our position based on the top/bottom of the object.
             if self.change_y > 0:

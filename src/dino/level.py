@@ -2,8 +2,9 @@ import json
 import pygame
 
 from dino.blocks.basic import BasicBlock
-from dino.blocks.invisible import InvisibleBlock
 from dino.blocks.death import DeathBlock
+from dino.blocks.invisible import InvisibleBlock
+from dino.blocks.player_spawn import PlayerSpawnBlock
 from dino.constants import BLUE, PLAYER_SYMBOL, BASIC_BLOCK_SYMBOL,\
                            INVISIBLE_BLOCK_SYMBOL, DEATH_BLOCK_SYMBOL
 
@@ -12,7 +13,6 @@ class Level:
     def __init__(self, view, tile_width, tile_height, map_file, info_file):
         # View information
         self.view = view
-
         self.world_shift_x = 0
         self.world_shift_y = 0
 
@@ -36,7 +36,9 @@ class Level:
         tile_width_count = max(len(row) for row in raw_map)
         world_center = (tile_width_count * tile_width,
                         tile_height_count * tile_height)
-        self.player_spawn = (0, 0)
+        self.player_spawn = self.player_spawn = PlayerSpawnBlock(0, 0, 
+                                                                 tile_width,
+                                                                 tile_height)
 
         for row in range(len(raw_map)):
             for col in range(len(raw_map[row])):
@@ -47,7 +49,9 @@ class Level:
                 tile_symbol = raw_map[row][col]
 
                 if tile_symbol == PLAYER_SYMBOL:
-                    self.player_spawn = (x, y)
+                    self.player_spawn = PlayerSpawnBlock(x, y, 
+                                                         tile_width,
+                                                         tile_height)
                 elif tile_symbol == BASIC_BLOCK_SYMBOL:
                     self.block_list.add(BasicBlock(x, y, 
                                                    tile_width, tile_height))
@@ -63,16 +67,25 @@ class Level:
                 else:
                     raise ValueError(f"Unknown tile symbol: {tile_symbol}")
 
+
     def reset_player(self, player):
-        player.rect.left = self.player_spawn[0]
-        player.rect.top = self.player_spawn[1]
+        player.rect.left = self.player_spawn.rect.left
+        player.rect.top = self.player_spawn.rect.top
+        player.revive()
+        self.world_shift_x = 0
+        self.world_shift_y = 0
+
 
     # Update everything on this level
     def update(self, player):
         """ Update everything in this level."""
-        self.block_list.update()
+        # Update world around the player
+        self.block_list.update(player)
         self.enemy_list.update()
 
+        # Determine if player has died
+        if player.dead:
+            self.reset_player(player)
 
         # Determine if player has left the world view
         x_diff = 0
@@ -102,6 +115,9 @@ class Level:
         self.world_shift_y += y_diff
 
         # Go through all the sprite lists and shift
+        self.player_spawn.rect.x += x_diff
+        self.player_spawn.rect.y += y_diff
+
         for block in self.block_list:
             block.rect.x += x_diff
             block.rect.y += y_diff
