@@ -39,8 +39,8 @@ class Level:
         for row in range(len(raw_map)):
             for col in range(len(raw_map[row])):
                 tile_symbol = raw_map[row][col]
-                x = tile_width * row
-                y = tile_height * col
+                x = tile_width * col
+                y = tile_height * row
                 if tile_symbol == PLAYER_SYMBOL:
                     self.player_spawn = (x, y)
                 elif tile_symbol == BLOCK_SYMBOL:

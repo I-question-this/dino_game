@@ -41,8 +41,8 @@ VIEW_HEIGHT = 500
 VIEW_RECT = pygame.Rect((SCREEN_WIDTH-VIEW_WIDTH)//2,
                             (SCREEN_HEIGHT-VIEW_HEIGHT)//2,
                             VIEW_WIDTH, VIEW_HEIGHT)
-TILE_WIDTH = 50
-TILE_HEIGHT = 50
+TILE_WIDTH = 100
+TILE_HEIGHT = 100
 
 def main():
     """ Main Program """
@@ -70,8 +70,6 @@ def main():
     active_sprite_list = pygame.sprite.Group()
 
     # Setting the starting player location should be part of the level.
-    player.rect.x = 340
-    player.rect.y = SCREEN_HEIGHT - player.rect.height
     active_sprite_list.add(player)
 
     # Loop until the user clicks the close button.
