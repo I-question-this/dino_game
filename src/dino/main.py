@@ -19,8 +19,10 @@ http://programarcadegames.com/python_examples/sprite_sheets/
 """
 
 import pygame
+
+from dino.assets import LEVEL_1_INFO, LEVEL_1_MAP
+from dino.level import Level
 from dino.player import Player
-from dino.world import World
 
 # Global constants
 
@@ -39,85 +41,8 @@ VIEW_HEIGHT = 500
 VIEW_RECT = pygame.Rect((SCREEN_WIDTH-VIEW_WIDTH)//2,
                             (SCREEN_HEIGHT-VIEW_HEIGHT)//2,
                             VIEW_WIDTH, VIEW_HEIGHT)
-
-
-class Platform(pygame.sprite.Sprite):
-    """ Platform the user can jump on """
-
-    def __init__(self, width, height):
-        """ Platform constructor. Assumes constructed with user passing in
-            an array of 5 numbers like what's defined at the top of this
-            code. """
-        super().__init__()
-
-        self.image = pygame.Surface([width, height])
-        self.image.fill(GREEN)
-
-        self.rect = self.image.get_rect()
-
-
-class Level(object):
-    """ This is a generic super-class used to define a level.
-        Create a child class for each level with level-specific
-        info. """
-
-    def __init__(self, player):
-        """ Constructor. Pass in a handle to player. Needed for when moving platforms
-            collide with the player. """
-        self.platform_list = pygame.sprite.Group()
-        self.enemy_list = pygame.sprite.Group()
-        self.player = player
-        
-        # Background image
-        self.background = None
-
-    # Update everythign on this level
-    def update(self):
-        """ Update everything in this level."""
-        self.platform_list.update()
-        self.enemy_list.update()
-
-    def draw(self, screen):
-        """ Draw everything on this level. """
-
-        # Draw the background
-        screen.fill(BLUE)
-
-        # Draw all the sprite lists that we have
-        self.platform_list.draw(screen)
-        self.enemy_list.draw(screen)
-
-
-# Create platforms for the level
-class Level_01(World):
-    """ Definition for level 1. """
-
-    def __init__(self, player):
-        """ Create level 1. """
-
-        # Call the parent constructor
-        World.__init__(self, player)
-
-        # Array with width, height, x, and y of platform
-        level = [
-                 [SCREEN_HEIGHT, SCREEN_WIDTH, 000, SCREEN_HEIGHT],
-                 [210, 70, 500, 500],
-                 [210, 70, 200, 400],
-                 [210, 70, 600, 300],
-                 [210, 70, 700, 200],
-                 [210, 70, 800, 000],
-                 [210, 70, 900, -100],
-                 ]
-
-        # Go through the array above and add platforms
-        # This for loop should be part of the Level superclass
-        for platform in level:
-            block = Platform(platform[0], platform[1])
-            # These should be part of the Platfrom __init__
-            block.rect.x = platform[2]
-            block.rect.y = platform[3]
-            self.platform_list.add(block)
-
+TILE_WIDTH = 50
+TILE_HEIGHT = 50
 
 def main():
     """ Main Program """
@@ -134,15 +59,15 @@ def main():
 
     # Create all the levels
     level_list = []
-    level_list.append( Level_01(VIEW_RECT) )
+    level_list.append(Level(VIEW_RECT, TILE_WIDTH, TILE_HEIGHT, 
+                            LEVEL_1_MAP, LEVEL_1_INFO))
 
     # Set the current level
     current_level_no = 0
     current_level = level_list[current_level_no]
+    current_level.reset_player(player)
 
     active_sprite_list = pygame.sprite.Group()
-    # Might be better to pass the level to the player update method
-    player.level = current_level
 
     # Setting the starting player location should be part of the level.
     player.rect.x = 340
@@ -167,7 +92,7 @@ def main():
                 if event.key == pygame.K_RIGHT:
                     player.go_right()
                 if event.key == pygame.K_UP:
-                    player.jump()
+                    player.jump(current_level)
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT and player.change_x < 0:
@@ -176,7 +101,7 @@ def main():
                     player.stop()
 
         # Update the player.
-        active_sprite_list.update(current_level.world_shift_x)
+        active_sprite_list.update(current_level)
 
         # Update items in the level
         current_level.update(player)

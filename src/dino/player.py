@@ -35,9 +35,6 @@ class Player(pygame.sprite.Sprite):
         # THE BOTTOM PART OF THE SCREEN IS NOT A PLATFORM
         self.double_jump_available = True
 
-        # List of sprites we can bump against
-        self.level = None
-
         # List of all the frames for the little dino
         # Load the sprite sheet image and extract images; (x, y, width, height)
         sprite_sheet = SpriteSheet(DINO_DOUX)
@@ -61,7 +58,7 @@ class Player(pygame.sprite.Sprite):
 
         
 
-    def update(self, world_shift_x):
+    def update(self, level):
         """ Move the player. """
         # Gravity
         self.calc_grav()
@@ -73,7 +70,7 @@ class Player(pygame.sprite.Sprite):
         elif self.change_x > 0:
             self.direction = 'R'
         # Get the correct frame number to display
-        frame = (self.rect.x + world_shift_x // 30) % len(self.frames)
+        frame = (self.rect.x + level.world_shift_x // 30) % len(self.frames)
         if self.direction is 'R':
             self.image = self.frames[frame]
         else:
@@ -88,7 +85,7 @@ class Player(pygame.sprite.Sprite):
             self.image = self.walking_frames_l[frame]
         """
         # See if we hit anything
-        block_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
+        block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
         for block in block_hit_list:
             # If we are moving right,
             # set our right side to the left side of the item we hit
@@ -102,7 +99,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.change_y
 
         # Check and see if we hit anything
-        block_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
+        block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
         for block in block_hit_list:
 
             # Reset our position based on the top/bottom of the object.
@@ -129,18 +126,18 @@ class Player(pygame.sprite.Sprite):
             self.change_y = 0
             self.rect.y = SCREEN_HEIGHT - self.rect.height
 
-    def jump(self):
+    def jump(self, level):
         """ Called when user hits 'jump' button. """
 
-        # move down a bit and see if there is a platform below us.
+        # move down a bit and see if there is a block below us.
         # Move down 2 pixels because it doesn't work well if we only move down
-        # 1 when working with a platform moving down.
+        # 1 when working with a block moving down.
         self.rect.y += 2
-        platform_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
+        block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
         self.rect.y -= 2
 
         # If it is ok to jump, set our speed upwards
-        if len(platform_hit_list) > 0 or self.rect.bottom >= SCREEN_HEIGHT:
+        if len(block_hit_list) > 0 or self.rect.bottom >= SCREEN_HEIGHT:
             self.change_y = -10
         elif self.double_jump_available:
             self.change_y = -10
