@@ -25,10 +25,8 @@ class Player(pygame.sprite.Sprite):
         # Load the sprite sheet image and extract images; (x, y, width, height)
         sprite_sheet = SpriteSheet(DINO_DOUX, width, height)
         self.frames = []
-        for i in range(0, 23):
+        for i in range(0, 10):
             # Get the image from the sprite sheet
-            if i > 17:
-                print(i, "Needs a wider sprite")
             image = sprite_sheet.get_image((i*24)+4, 4, 15, 18)
             # Scale the image up
             image = sprite_sheet.transform_image(image)
@@ -102,15 +100,16 @@ class Player(pygame.sprite.Sprite):
         # Get the correct frame number to display
         # Idle Frames [0:2]
         # Walking Frames [3:11]
+        self.frame_number += 3
+        if self.frame_number > 240:
+            self.frame_number = 0
         if self.state == 'Walking':
             # walk_frames = self.frames[3:11]
-            walk_frames = self.frames[17:]
-            frame = (((self.rect.x + level.world_shift_x) // 30) % len(walk_frames)) + 17
+            walk_frames = self.frames[3:]
+            frame = (((self.rect.x + level.world_shift_x + self.frame_number) // 30) % len(walk_frames)) + 3
         else:
-            self.frame_number += 1
-            if self.frame_number > 30:
-                self.frame_number = 0
-            frame = self.frame_number // 10
+            frame = self.frame_number // 80
+            
 
         if self.direction is 'R':
             self.image = self.frames[frame]
