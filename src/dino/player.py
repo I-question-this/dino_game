@@ -39,7 +39,7 @@ class Player(pygame.sprite.Sprite):
         # Load the sprite sheet image and extract images; (x, y, width, height)
         sprite_sheet = SpriteSheet(DINO_DOUX)
         self.frames = []
-        for i in range(0, 11):
+        for i in range(0, 10):
             # Get the image from the sprite sheet
             image = sprite_sheet.get_image((i*24)+4, 4, 15, 18)
             # Scale the image up
@@ -56,6 +56,10 @@ class Player(pygame.sprite.Sprite):
         # Set a reference to the image rect.
         self.rect = self.image.get_rect()
 
+        # Testing
+        self.state = 'Idle' # Options Jumping, Walking, Idle
+        self.frame_number = 0
+
         
 
     def update(self, level):
@@ -65,25 +69,28 @@ class Player(pygame.sprite.Sprite):
 
         # Move left/right
         self.rect.x += self.change_x
-        if self.change_x < 0:
-            self.direction = 'L'
-        elif self.change_x > 0:
+
+        # First check jumping, then other states.
+        if self.change_x != 0: 
+            self.state = 'Walking'
+        else:
+            self.state = 'Idle'
+
+        # Change Direction
+        if self.change_x > 0:
             self.direction = 'R'
-        # Get the correct frame number to display
-        frame = (self.rect.x + level.world_shift_x // 30) % len(self.frames)
+        elif self.change_x < 0:
+            self.direction = 'L'        
+
+        # frame = ((self.rect.x + level.world_shift_x) // 30) % len(self.frames)
         if self.direction is 'R':
-            self.image = self.frames[frame]
+            self.image = self.frames[self.frame_number]
         else:
-            self.image = pygame.transform.flip(self.frames[frame], True, False)
-        """
-        pos = self.rect.x + self.level.world_shift
-        if self.direction == "R":
-            frame = (pos // 30) % len(self.walking_frames_r)
-            self.image = self.walking_frames_r[frame]
-        else:
-            frame = (pos // 30) % len(self.walking_frames_l)
-            self.image = self.walking_frames_l[frame]
-        """
+            self.image = pygame.transform.flip(self.frames[self.frame_number], True, False)
+        
+        print(f'STATE: {self.state}')
+        print(f'FRAME: {self.frame_number}')
+
         # See if we hit anything
         block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
         for block in block_hit_list:
@@ -94,6 +101,8 @@ class Player(pygame.sprite.Sprite):
             elif self.change_x < 0:
                 # Otherwise if we are moving left, do the opposite.
                 self.rect.left = block.rect.right
+            else:
+                self.state = 'Jumping' 
 
         # Move up/down
         self.rect.y += self.change_y
@@ -112,6 +121,22 @@ class Player(pygame.sprite.Sprite):
                 # Not setting the vertical movement to 0 here lets it be floaty
                 self.rect.top = block.rect.bottom
 
+        # Get the correct frame number to display
+        # Idle Frames [0:2]
+        # Walking Frames [3:11]
+        # Jump Frame [0]
+        if self.state == 'Jumping':
+            self.frame_number = 0
+        elif self.state == 'Walking':
+            if 1 < self.frame_number < 9:
+                self.frame_number += 1
+            else:
+                self.frame_number = 3
+        else:
+            if -1 < self.frame_number < 2:
+                self.frame_number += 1
+            else:
+                self.frame_number = 0
 
 
     def calc_grav(self):
