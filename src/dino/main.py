@@ -19,7 +19,7 @@ http://programarcadegames.com/python_examples/sprite_sheets/
 """
 
 import pygame
-from player import Player
+from dino.player import Player
 
 # Global constants
 
