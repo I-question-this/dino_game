@@ -32,9 +32,10 @@ class Level:
         with open(map_file) as fin:
             raw_map = fin.read().split("\n")
 
+        # Details for player respawn, and out-of-bounds check
         tile_height_count = len(raw_map)
         tile_width_count = max(len(row) for row in raw_map)
-        world_center = (tile_width_count * tile_width,
+        self.world_size = (tile_width_count * tile_width,
                         tile_height_count * tile_height)
         self.player_spawn = self.player_spawn = PlayerSpawnBlock(0, 0, 
                                                                  tile_width,
@@ -86,6 +87,13 @@ class Level:
         # Determine if player has died
         if player.dead:
             self.reset_player(player)
+
+        # Check if player has gone way out of the world
+        if abs(player.rect.right - self.player_spawn.rect.right)\
+                > self.world_size[0]\
+            or abs(player.rect.top - self.player_spawn.rect.top)\
+                > self.world_size[1]:
+                self.reset_player(player)
 
         # Determine if player has left the world view
         x_diff = 0
