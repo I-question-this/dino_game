@@ -25,8 +25,10 @@ class Player(pygame.sprite.Sprite):
         # Load the sprite sheet image and extract images; (x, y, width, height)
         sprite_sheet = SpriteSheet(DINO_DOUX, width, height)
         self.frames = []
-        for i in range(0, 10):
+        for i in range(0, 23):
             # Get the image from the sprite sheet
+            if i > 17:
+                print(i, "Needs a wider sprite")
             image = sprite_sheet.get_image((i*24)+4, 4, 15, 18)
             # Scale the image up
             image = sprite_sheet.transform_image(image)
@@ -56,26 +58,11 @@ class Player(pygame.sprite.Sprite):
         # Move left/right
         self.rect.x += self.change_x
 
-        # First check jumping, then other states.
-        if self.change_x != 0: 
-            self.state = 'Walking'
-        else:
-            self.state = 'Idle'
-
         # Change Direction
         if self.change_x > 0:
             self.direction = 'R'
         elif self.change_x < 0:
             self.direction = 'L'        
-
-        # frame = ((self.rect.x + level.world_shift_x) // 30) % len(self.frames)
-        if self.direction is 'R':
-            self.image = self.frames[self.frame_number]
-        else:
-            self.image = pygame.transform.flip(self.frames[self.frame_number], True, False)
-        
-        print(f'STATE: {self.state}')
-        print(f'FRAME: {self.frame_number}')
 
         # See if we hit anything
         block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
@@ -87,8 +74,6 @@ class Player(pygame.sprite.Sprite):
             elif self.change_x < 0:
                 # Otherwise if we are moving left, do the opposite.
                 self.rect.left = block.rect.right
-            else:
-                self.state = 'Jumping' 
 
         # Move up/down
         self.rect.y += self.change_y
@@ -108,23 +93,29 @@ class Player(pygame.sprite.Sprite):
                 self.change_y = 0
                 self.rect.top = block.rect.bottom
 
+        # First check jumping, then other states.
+        if self.change_x != 0: 
+            self.state = 'Walking'
+        else:
+            self.state = 'Idle'
+
         # Get the correct frame number to display
         # Idle Frames [0:2]
         # Walking Frames [3:11]
-        # Jump Frame [0]
-        if self.state == 'Jumping':
-            self.frame_number = 0
-        elif self.state == 'Walking':
-            if 1 < self.frame_number < 9:
-                self.frame_number += 1
-            else:
-                self.frame_number = 3
+        if self.state == 'Walking':
+            # walk_frames = self.frames[3:11]
+            walk_frames = self.frames[17:]
+            frame = (((self.rect.x + level.world_shift_x) // 30) % len(walk_frames)) + 17
         else:
-            if -1 < self.frame_number < 2:
-                self.frame_number += 1
-            else:
+            self.frame_number += 1
+            if self.frame_number > 30:
                 self.frame_number = 0
+            frame = self.frame_number // 10
 
+        if self.direction is 'R':
+            self.image = self.frames[frame]
+        else:
+            self.image = pygame.transform.flip(self.frames[frame], True, False)
 
     def calc_grav(self):
         """ Calculate effect of gravity. """
