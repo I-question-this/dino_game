@@ -34,11 +34,11 @@ BLUE = (0, 0, 255)
 # Screen dimensions
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-BOUNDARY_WIDTH = 700
-BOUNDARY_HEIGHT = 500
-BOUNDARY_RECT = pygame.Rect((SCREEN_WIDTH-BOUNDARY_WIDTH)//2,
-                            (SCREEN_HEIGHT-BOUNDARY_HEIGHT)//2,
-                            BOUNDARY_WIDTH, BOUNDARY_HEIGHT)
+VIEW_WIDTH = 700
+VIEW_HEIGHT = 500
+VIEW_RECT = pygame.Rect((SCREEN_WIDTH-VIEW_WIDTH)//2,
+                            (SCREEN_HEIGHT-VIEW_HEIGHT)//2,
+                            VIEW_WIDTH, VIEW_HEIGHT)
 
 
 class Platform(pygame.sprite.Sprite):
@@ -134,7 +134,7 @@ def main():
 
     # Create all the levels
     level_list = []
-    level_list.append( Level_01(BOUNDARY_RECT) )
+    level_list.append( Level_01(VIEW_RECT) )
 
     # Set the current level
     current_level_no = 0
