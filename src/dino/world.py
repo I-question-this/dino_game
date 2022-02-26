@@ -23,6 +23,7 @@ class World:
         x_diff = 0
         y_diff = 0
 
+        # Determine if player has left the world view boundary
         if player.rect.right >= self.boundry.right:
             x_diff = self.boundry.right - player.rect.right
             player.rect.right = self.boundry.right
@@ -30,6 +31,14 @@ class World:
         if player.rect.left <= self.boundry.left:
             x_diff = self.boundry.left - player.rect.left
             player.rect.left = self.boundry.left
+
+        if player.rect.top <= self.boundry.top:
+            y_diff = self.boundry.top - player.rect.top
+            player.rect.top = self.boundry.top
+
+        if player.rect.bottom >= self.boundry.bottom:
+            y_diff = self.boundry.bottom - player.rect.bottom
+            player.rect.bottom = self.boundry.bottom
 
         self.shift_world(x_diff, y_diff)
 

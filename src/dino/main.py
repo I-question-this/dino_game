@@ -99,9 +99,14 @@ class Level_01(World):
         World.__init__(self, player)
 
         # Array with width, height, x, and y of platform
-        level = [[210, 70, 500, 500],
+        level = [
+                 [SCREEN_HEIGHT, SCREEN_WIDTH, 000, SCREEN_HEIGHT],
+                 [210, 70, 500, 500],
                  [210, 70, 200, 400],
                  [210, 70, 600, 300],
+                 [210, 70, 700, 200],
+                 [210, 70, 800, 000],
+                 [210, 70, 900, -100],
                  ]
 
         # Go through the array above and add platforms
