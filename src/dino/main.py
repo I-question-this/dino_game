@@ -267,9 +267,9 @@ def main():
                     player.jump()
 
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT:# and player.change_x < 0:
+                if event.key == pygame.K_LEFT and player.change_x < 0:
                     player.stop()
-                if event.key == pygame.K_RIGHT:# and player.change_x > 0:
+                if event.key == pygame.K_RIGHT and player.change_x > 0:
                     player.stop()
 
         # Update the player.
