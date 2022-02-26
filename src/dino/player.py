@@ -67,6 +67,15 @@ class Player(pygame.sprite.Sprite):
         # Move left/right
         self.rect.x += self.change_x
 
+        # Get the correct frame number to display
+        frame = (self.rect.x // 30) % len(self.frames)
+        if self.change_x < 0:
+            # Moving left. Flip the player frame
+            self.image = pygame.transform.flip(self.frames[frame], True, False)
+        else:
+            # Moving right. Leave player frame un-transformed
+            self.image = self.frames[frame]
+
         # See if we hit anything
         block_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
         for block in block_hit_list:
@@ -95,8 +104,7 @@ class Player(pygame.sprite.Sprite):
                 # Not setting the vertical movement to 0 here lets it be floaty
                 self.rect.top = block.rect.bottom
 
-        frame = (self.rect.x // 30) % len(self.frames)
-        self.image = self.frames[frame]
+
 
     def calc_grav(self):
         """ Calculate effect of gravity. """
