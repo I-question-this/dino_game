@@ -52,7 +52,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
         # Testing
-        self.state = 'Idle' # Options Jumping, Walking, Idle
+        self.state = 'Idle' # Options Walking, Idle
         self.frame_number = 0
 
         
@@ -65,28 +65,14 @@ class Player(pygame.sprite.Sprite):
         # Move left/right
         self.rect.x += self.change_x
 
-        # First check jumping, then other states.
-        if self.change_x != 0: 
-            self.state = 'Walking'
-        else:
-            self.state = 'Idle'
-
         # Change Direction
         if self.change_x > 0:
             self.direction = 'R'
         elif self.change_x < 0:
             self.direction = 'L'        
-
-        # frame = ((self.rect.x + level.world_shift_x) // 30) % len(self.frames)
-        if self.direction is 'R':
-            self.image = self.frames[self.frame_number]
-        else:
-            self.image = pygame.transform.flip(self.frames[self.frame_number], True, False)
         
-        print(f'STATE: {self.state}')
-        print(f'FRAME: {self.frame_number}')
 
-        # See if we hit anything
+        # See if we hit anything in x direction
         block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
         for block in block_hit_list:
             # If we are moving right,
@@ -96,16 +82,13 @@ class Player(pygame.sprite.Sprite):
             elif self.change_x < 0:
                 # Otherwise if we are moving left, do the opposite.
                 self.rect.left = block.rect.right
-            else:
-                self.state = 'Jumping' 
 
         # Move up/down
         self.rect.y += self.change_y
 
-        # Check and see if we hit anything
+        # Check and see if we hit anything in  direction
         block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
         for block in block_hit_list:
-
             # Reset our position based on the top/bottom of the object.
             if self.change_y > 0:
                 self.rect.bottom = block.rect.top
@@ -116,22 +99,27 @@ class Player(pygame.sprite.Sprite):
                 # Not setting the vertical movement to 0 here lets it be floaty
                 self.rect.top = block.rect.bottom
 
+        # Check walking or idling
+        if self.change_x != 0: 
+            self.state = 'Walking'
+        else:
+            self.state = 'Idle'
+
         # Get the correct frame number to display
         # Idle Frames [0:2]
         # Walking Frames [3:11]
-        # Jump Frame [0]
-        if self.state == 'Jumping':
-            self.frame_number = 0
-        elif self.state == 'Walking':
-            if 1 < self.frame_number < 9:
-                self.frame_number += 1
-            else:
-                self.frame_number = 3
+        if self.state == 'Walking':
+            walk_frames = self.frames[3:]
+            frame = (((self.rect.x + level.world_shift_x) // 30) % len(walk_frames)) + 3
         else:
-            if -1 < self.frame_number < 2:
-                self.frame_number += 1
-            else:
+            self.frame_number += 1
+            if self.frame_number > 30:
                 self.frame_number = 0
+            frame = self.frame_number // 10
+        if self.direction is 'R':
+            self.image = self.frames[frame]
+        else:
+            self.image = pygame.transform.flip(self.frames[frame], True, False)
 
 
     def calc_grav(self):
