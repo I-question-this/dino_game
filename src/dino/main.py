@@ -176,7 +176,7 @@ def main():
                     player.stop()
 
         # Update the player.
-        active_sprite_list.update()
+        active_sprite_list.update(current_level.world_shift_x)
 
         # Update items in the level
         current_level.update(player)

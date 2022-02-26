@@ -2,9 +2,7 @@ import pygame
 from dino.assets import DINO_DOUX
 from dino.spritesheet import SpriteSheet
 
-
 # TODO: Move constants to seperate file that is imported into each file.
-# TODO: Move SpriteSheet
 # Color
 RED = (255, 0, 0)
 BLACK = (0, 0, 0)
@@ -52,30 +50,43 @@ class Player(pygame.sprite.Sprite):
             # Add the image to the list of frames
             self.frames.append(image)
 
+        # Set direction
+        self.direction = 'R' # Faces 'R'ight or 'L'eft
+
         # Set the image the player starts with
         self.image = self.frames[0]
  
         # Set a reference to the image rect.
         self.rect = self.image.get_rect()
 
+        
 
-    def update(self):
+    def update(self, world_shift_x):
         """ Move the player. """
         # Gravity
         self.calc_grav()
 
         # Move left/right
         self.rect.x += self.change_x
-
-        # Get the correct frame number to display
-        frame = (self.rect.x // 30) % len(self.frames)
         if self.change_x < 0:
-            # Moving left. Flip the player frame
-            self.image = pygame.transform.flip(self.frames[frame], True, False)
-        else:
-            # Moving right. Leave player frame un-transformed
+            self.direction = 'L'
+        elif self.change_x > 0:
+            self.direction = 'R'
+        # Get the correct frame number to display
+        frame = (self.rect.x + world_shift_x // 30) % len(self.frames)
+        if self.direction is 'R':
             self.image = self.frames[frame]
-
+        else:
+            self.image = pygame.transform.flip(self.frames[frame], True, False)
+        """
+        pos = self.rect.x + self.level.world_shift
+        if self.direction == "R":
+            frame = (pos // 30) % len(self.walking_frames_r)
+            self.image = self.walking_frames_r[frame]
+        else:
+            frame = (pos // 30) % len(self.walking_frames_l)
+            self.image = self.walking_frames_l[frame]
+        """
         # See if we hit anything
         block_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
         for block in block_hit_list:
