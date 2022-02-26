@@ -210,10 +210,14 @@ class Level_01(Level):
                  ]
 
         # Go through the array above and add platforms
+        # This for loop should be part of the Level superclass
         for platform in level:
             block = Platform(platform[0], platform[1])
+            # These should be part of the Platfrom __init__
             block.rect.x = platform[2]
             block.rect.y = platform[3]
+            # Why does this exist? It is not used, and should not
+            # be done this way?
             block.player = self.player
             self.platform_list.add(block)
 
@@ -240,8 +244,10 @@ def main():
     current_level = level_list[current_level_no]
 
     active_sprite_list = pygame.sprite.Group()
+    # Might be better to pass the level to the player update method
     player.level = current_level
 
+    # Setting the starting player location should be part of the level.
     player.rect.x = 340
     player.rect.y = SCREEN_HEIGHT - player.rect.height
     active_sprite_list.add(player)
