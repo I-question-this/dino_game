@@ -50,6 +50,10 @@ class SpriteSheet():
         # Return the image
         return image
 
+    def transform_image(self, image):
+        image = pygame.transform.scale(image, (72,72))
+        return image
+
 
 class Player(pygame.sprite.Sprite):
     """ This class represents the bar at the bottom that the player
@@ -89,9 +93,12 @@ class Player(pygame.sprite.Sprite):
         # List of all the frames for the little dino
         # Load the sprite sheet image and extract images
         sprite_sheet = SpriteSheet(DINO_DOUX)
-        self.frames = [sprite_sheet.get_image(0, 0, 24, 24),
-                sprite_sheet.get_image(24, 0, 24, 24)]
+        self.frames = [sprite_sheet.get_image(4, 4, 16, 18),
+                sprite_sheet.get_image(28, 4, 16, 18)]
         self.frame_number = 0
+
+        for i in range(len(self.frames)):
+            self.frames[i] = sprite_sheet.transform_image(self.frames[i])
 
         # Set the image the player starts with
         self.image = self.frames[0]
