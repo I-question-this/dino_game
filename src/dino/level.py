@@ -1,8 +1,11 @@
 import json
 import pygame
 
-from dino.block import Block
-from dino.constants import BLUE, PLAYER_SYMBOL, BLOCK_SYMBOL
+from dino.blocks.basic import BasicBlock
+from dino.blocks.invisible import InvisibleBlock
+from dino.blocks.death import DeathBlock
+from dino.constants import BLUE, PLAYER_SYMBOL, BASIC_BLOCK_SYMBOL,\
+                           INVISIBLE_BLOCK_SYMBOL, DEATH_BLOCK_SYMBOL
 
 
 class Level:
@@ -31,6 +34,8 @@ class Level:
 
         tile_height_count = len(raw_map)
         tile_width_count = max(len(row) for row in raw_map)
+        world_center = (tile_width_count * tile_width,\
+                        tile_height_count * tile_height)
         self.player_spawn = (0, 0)
 
         for row in range(len(raw_map)):
@@ -40,8 +45,12 @@ class Level:
                 y = tile_height * row
                 if tile_symbol == PLAYER_SYMBOL:
                     self.player_spawn = (x, y)
-                elif tile_symbol == BLOCK_SYMBOL:
-                    self.block_list.add(Block(x, y, tile_width, tile_height))
+                elif tile_symbol == BASIC_BLOCK_SYMBOL:
+                    self.block_list.add(BasicBlock(x, y, tile_width, tile_height))
+                elif tile_symbol == INVISIBLE_BLOCK_SYMBOL:
+                    self.block_list.add(InvisibleBlock(x, y, tile_width, tile_height))
+                elif tile_symbol == DEATH_BLOCK_SYMBOL:
+                    self.block_list.add(DeathBlock(x, y, tile_width, tile_height))
                 elif tile_symbol == " ":
                     # Ignore empty spaces
                     pass
@@ -58,10 +67,11 @@ class Level:
         self.block_list.update()
         self.enemy_list.update()
 
+
+        # Determine if player has left the world view
         x_diff = 0
         y_diff = 0
 
-        # Determine if player has left the world view
         if player.rect.right >= self.view.right:
             x_diff = self.view.right - player.rect.right
             player.rect.right = self.view.right

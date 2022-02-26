@@ -2,11 +2,9 @@ import pygame
 
 from dino.constants import GREEN
 
-
-class Block(pygame.sprite.Sprite):
+class BasicBlock(pygame.sprite.Sprite):
     def __init__(self, left, top, width, height):
         super().__init__()
-
         self.image = pygame.Surface([width, height])
         self.image.fill(GREEN)
 
