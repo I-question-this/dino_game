@@ -97,6 +97,7 @@ class Player(pygame.sprite.Sprite):
                 self.double_jump_available = True
             elif self.change_y < 0:
                 # Not setting the vertical movement to 0 here lets it be floaty
+                self.change_y = 0
                 self.rect.top = block.rect.bottom
 
         # Check walking or idling
@@ -127,7 +128,7 @@ class Player(pygame.sprite.Sprite):
         if self.change_y == 0:
             self.change_y = 1
         else:
-            self.change_y += .45
+            self.change_y += .5
 
         # See if we are on the ground.
         if self.rect.y >= SCREEN_HEIGHT - self.rect.height and self.change_y >= 0:
