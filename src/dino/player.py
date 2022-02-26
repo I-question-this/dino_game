@@ -105,6 +105,7 @@ class Player(pygame.sprite.Sprite):
                 self.double_jump_available = True
             elif self.change_y < 0:
                 # Not setting the vertical movement to 0 here lets it be floaty
+                self.change_y = 0
                 self.rect.top = block.rect.bottom
 
         # Get the correct frame number to display
@@ -130,7 +131,7 @@ class Player(pygame.sprite.Sprite):
         if self.change_y == 0:
             self.change_y = 1
         else:
-            self.change_y += .45
+            self.change_y += .5
 
     def jump(self, level):
         """ Called when user hits 'jump' button. """
