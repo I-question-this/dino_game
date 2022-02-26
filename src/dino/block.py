@@ -1,7 +1,7 @@
 import pygame
 
+from dino.constants import GREEN
 
-GREEN = (0, 255, 0)
 
 class Block(pygame.sprite.Sprite):
     def __init__(self, left, top, width, height):

@@ -1,6 +1,6 @@
 import pygame 
 
-BLACK = (0, 0, 0)
+from dino.constants import BLACK
 
 class SpriteSheet():
     """ Class used to grab images out of a sprite sheet. """

@@ -2,11 +2,8 @@ import json
 import pygame
 
 from dino.block import Block
+from dino.constants import BLUE, PLAYER_SYMBOL, BLOCK_SYMBOL
 
-PLAYER_SYMBOL = "P"
-BLOCK_SYMBOL = "B"
-
-BLUE = (0, 0, 255)
 
 class Level:
     def __init__(self, view, tile_width, tile_height, map_file, info_file):

@@ -1,5 +1,6 @@
 import pygame
-BLUE = (0, 0, 255)
+from dino.constants import BLUE
+
 
 class World:
     """ This is a generic super-class used to define a level.
