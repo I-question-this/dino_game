@@ -41,8 +41,8 @@ VIEW_HEIGHT = 500
 VIEW_RECT = pygame.Rect((SCREEN_WIDTH-VIEW_WIDTH)//2,
                             (SCREEN_HEIGHT-VIEW_HEIGHT)//2,
                             VIEW_WIDTH, VIEW_HEIGHT)
-TILE_WIDTH = 100
-TILE_HEIGHT = 100
+TILE_WIDTH = 72
+TILE_HEIGHT = 72
 
 def main():
     """ Main Program """
@@ -55,7 +55,7 @@ def main():
     pygame.display.set_caption("Platformer Jumper")
 
     # Create the player
-    player = Player()
+    player = Player(TILE_WIDTH, TILE_HEIGHT)
 
     # Create all the levels
     level_list = []

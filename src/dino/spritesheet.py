@@ -5,10 +5,12 @@ BLACK = (0, 0, 0)
 class SpriteSheet():
     """ Class used to grab images out of a sprite sheet. """
  
-    def __init__(self, file_name):
+    def __init__(self, file_name, width, height):
         """ Constructor. Pass in the file name of the sprite sheet. """
  
         # Load the sprite sheet.
+        self.width = width
+        self.height = height
         self.sprite_sheet = pygame.image.load(file_name).convert_alpha()
  
  
@@ -30,5 +32,5 @@ class SpriteSheet():
         return image
 
     def transform_image(self, image):
-        image = pygame.transform.scale(image, (72,72))
+        image = pygame.transform.scale(image, (self.width, self.height))
         return image

@@ -15,16 +15,11 @@ class Player(pygame.sprite.Sprite):
         controls. """
 
     # -- Methods
-    def __init__(self):
+    def __init__(self, width, height):
         """ Constructor function """
 
         # Call the parent's constructor
         super().__init__()
-
-        # Create an image of the block, and fill it with a color.
-        # This could also be an image loaded from the disk.
-        width = 40
-        height = 60
 
         # Set speed vector of player
         self.change_x = 0
@@ -37,7 +32,7 @@ class Player(pygame.sprite.Sprite):
 
         # List of all the frames for the little dino
         # Load the sprite sheet image and extract images; (x, y, width, height)
-        sprite_sheet = SpriteSheet(DINO_DOUX)
+        sprite_sheet = SpriteSheet(DINO_DOUX, width, height)
         self.frames = []
         for i in range(0, 10):
             # Get the image from the sprite sheet
