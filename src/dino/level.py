@@ -150,7 +150,7 @@ class Level:
 
         for enemy in self.enemy_list:
             enemy.rect.x += x_diff
-            enemy.rect.x += y_diff
+            enemy.rect.y += y_diff
 
     def draw(self, screen):
         """ Draw everything on this level. """
