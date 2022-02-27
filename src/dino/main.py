@@ -22,7 +22,7 @@ from queue import Empty
 from xml.dom.minicompat import EmptyNodeList
 import pygame
 
-from dino.assets import LEVEL_1_INFO, LEVEL_1_MAP
+from dino.assets import LEVEL_1_INFO, LEVEL_1_MAP, LEVEL_2_INFO, LEVEL_2_MAP
 from dino.level import Level
 from dino.constants import SCREEN_WIDTH, SCREEN_HEIGHT, VIEW_RECT,\
                            TILE_WIDTH, TILE_HEIGHT
@@ -41,6 +41,8 @@ def main():
     level_list = []
     level_list.append(Level(VIEW_RECT, TILE_WIDTH, TILE_HEIGHT, 
                             LEVEL_1_MAP, LEVEL_1_INFO))
+    level_list.append(Level(VIEW_RECT, TILE_WIDTH, TILE_HEIGHT, 
+                            LEVEL_2_MAP, LEVEL_2_INFO))
 
     # Set the current level
     current_level_no = 0
@@ -76,6 +78,11 @@ def main():
 
         # Update the level
         current_level.update()
+        if current_level.done:
+            current_level_no += 1
+            if current_level_no > len(level_list):
+                pygame.quit()
+            current_level = level_list[current_level_no]
 
         # Draw the level
         current_level.draw(screen)

@@ -1,6 +1,7 @@
 import pygame
 from dino.assets.sprites.dinos import DINO_DOUX_FRAMES
 from dino.entities.entity import Entity
+from dino.blocks.win import WinBlock
 
 
 class Player(Entity):
@@ -14,7 +15,14 @@ class Player(Entity):
 
     
     def update(self, level):
-        super().update(level)
+        x_axis_block_hit_list, y_axis_block_hit_list = super().update(level)
+        for block in x_axis_block_hit_list:
+            if isinstance(block, WinBlock):
+                level.done = True
+        for block in y_axis_block_hit_list:
+            if isinstance(block, WinBlock):
+                level.done = True
+
 
         x_axis_enemy_hit_list = pygame.sprite.spritecollide(self, 
                 level.enemy_list, False)
@@ -40,3 +48,5 @@ class Player(Entity):
                 self.change_y = 0
                 self.rect.top = enemy.rect.bottom
             self.dead = True
+
+        

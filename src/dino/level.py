@@ -5,11 +5,12 @@ from dino.blocks.basic import BasicBlock
 from dino.blocks.death import DeathBlock
 from dino.blocks.invisible import InvisibleBlock
 from dino.blocks.spawn import SpawnBlock
+from dino.blocks.win import WinBlock
 from dino.entities.enemy import Enemy
 from dino.entities.player import Player
 from dino.constants import BLUE, PLAYER_SYMBOL, BASIC_BLOCK_SYMBOLS,\
                            INVISIBLE_BLOCK_SYMBOL, DEATH_BLOCK_SYMBOL,\
-                           ENEMY_SYMBOL
+                           ENEMY_SYMBOL, WIN_SYMBOL
 
 
 
@@ -28,6 +29,9 @@ class Level:
         with open(info_file) as fin:
             info = json.load(fin)
             self.boundary_death = info["boundary_death"]
+
+        # Level Complete
+        self.done = False
 
         # Load level map
         self.block_list = pygame.sprite.Group()
@@ -72,6 +76,9 @@ class Level:
                     spawn = SpawnBlock(x, y, tile_width, tile_height)
                     self.spawn_list.add(spawn)
                     self.enemy_list.add(Enemy(tile_width, tile_height, spawn))
+                elif tile_symbol == WIN_SYMBOL:
+                    self.block_list.add(WinBlock(x, y,
+                                                    tile_width, tile_height, tile_symbol))
                 elif tile_symbol == " ":
                     # Ignore empty spaces
                     pass

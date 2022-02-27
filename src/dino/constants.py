@@ -25,4 +25,5 @@ PLAYER_SYMBOL = "P"
 INVISIBLE_BLOCK_SYMBOL = "I"
 DEATH_BLOCK_SYMBOL = "D"
 ENEMY_SYMBOL = "E"
+WIN_SYMBOL = "W"
 BASIC_BLOCK_SYMBOLS = ["T", "R", "G", "l", "g", "r", "B", "t", "L", "b", "O", "o", "N", "n", "q", "Q"]

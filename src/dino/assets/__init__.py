@@ -15,6 +15,9 @@ DINO_VITA = os.path.join(SPRITES_DIR, "DinoSprites--vita.png")
 LEVEL_DIR = os.path.join(ASSETS_DIR, "levels")
 LEVEL_1_INFO = os.path.join(LEVEL_DIR, "level_1.json")
 LEVEL_1_MAP = os.path.join(LEVEL_DIR, "level_1.lvl")
+LEVEL_2_INFO = os.path.join(LEVEL_DIR, "level_2.json")
+LEVEL_2_MAP = os.path.join(LEVEL_DIR, "level_2.lvl")
+
 
 # Tile Files
 BASIC_BLOCK_FILES = {
@@ -27,13 +30,13 @@ BASIC_BLOCK_FILES = {
     "B":os.path.join(SPRITES_DIR, "Tiles/tile_0006.png"),
     "t":os.path.join(SPRITES_DIR, "Tiles/tile_0020.png"),
     "L":os.path.join(SPRITES_DIR, "Tiles/tile_0021.png"),
-
     "O":os.path.join(SPRITES_DIR, "Tiles/tile_0142.png"),
     "n":os.path.join(SPRITES_DIR, "Tiles/tile_0143.png"),
     "N":os.path.join(SPRITES_DIR, "Tiles/tile_0141.png"),
     "q":os.path.join(SPRITES_DIR, "Tiles/tile_0121.png"),
     "Q":os.path.join(SPRITES_DIR, "Tiles/tile_0123.png"),
     "o":os.path.join(SPRITES_DIR, "Tiles/tile_0120.png"),
+    "W":os.path.join(SPRITES_DIR, "Tiles/tile_0130.png")
 }
 
 DIRT_BLOCK_FILES = [os.path.join(SPRITES_DIR, "Tiles/tile_0002.png"),
