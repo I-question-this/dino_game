@@ -7,9 +7,10 @@ from dino.blocks.invisible import InvisibleBlock
 from dino.blocks.spawn import SpawnBlock
 from dino.entities.enemy import Enemy
 from dino.entities.player import Player
-from dino.constants import BLUE, PLAYER_SYMBOL, BASIC_BLOCK_SYMBOL,\
+from dino.constants import BLUE, PLAYER_SYMBOL, BASIC_BLOCK_SYMBOLS,\
                            INVISIBLE_BLOCK_SYMBOL, DEATH_BLOCK_SYMBOL,\
                            ENEMY_SYMBOL
+
 
 
 class Level:
@@ -58,9 +59,9 @@ class Level:
                                                    tile_width,
                                                    tile_height)
                     self.spawn_list.add(self.player_spawn)
-                elif tile_symbol == BASIC_BLOCK_SYMBOL:
+                elif tile_symbol in BASIC_BLOCK_SYMBOLS:
                     self.block_list.add(BasicBlock(x, y, 
-                                                   tile_width, tile_height))
+                                                   tile_width, tile_height, tile_symbol))
                 elif tile_symbol == INVISIBLE_BLOCK_SYMBOL:
                     self.block_list.add(InvisibleBlock(x, y,
                                                        tile_width, tile_height))
