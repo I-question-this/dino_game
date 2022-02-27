@@ -14,6 +14,7 @@ class Direction(Enum):
 class State(Enum):
     IDLE = auto()
     WALKING = auto()
+    DEAD = auto()
 
 
 class Entity(pygame.sprite.Sprite, ABC):
@@ -26,9 +27,6 @@ class Entity(pygame.sprite.Sprite, ABC):
 
         # Call the parent's constructor
         super().__init__()
-
-        # Set death status
-        self.dead = False
 
         # Save spawn point
         self.spawn = spawn
@@ -58,6 +56,7 @@ class Entity(pygame.sprite.Sprite, ABC):
     def revive(self):
         # Set direction
         self.direction = Direction.RIGHT
+        self.stop()
 
         # Set the image the player starts with
         self.image = self.frames[0]
@@ -76,6 +75,7 @@ class Entity(pygame.sprite.Sprite, ABC):
 
         # Set status values
         self.dead = False
+        self.dead_frame_count = 0
         self.double_jump_available = True
 
     def turn_around(self):
@@ -137,23 +137,33 @@ class Entity(pygame.sprite.Sprite, ABC):
                 self.rect.top = block.rect.bottom
 
         # First check jumping, then other states.
-        if self.change_x != 0: 
-            self.state = State.WALKING
-        else:
-            self.state = State.IDLE
+        if self.dead:
+            if self.dead_frame_count >= 60:
+                self.revive()
+            else:
+                self.dead_frame_count += 1
+                frame = self.dead_frame_count // 10
+                frame %= self.sprite_sheet.num_death_frames
+                frame += self.sprite_sheet.death_frames_start
 
-        # Get the correct frame number to display
-        # Idle Frames [0:2]
-        # Walking Frames [3:11]
-        self.frame_number += 3
-        if self.frame_number > 240:
-            self.frame_number = 0
-        if self.state == State.WALKING:
-            frame = ((self.walked_distance//(self.speed*self.skitter))\
-                        % self.sprite_sheet.num_walk_frames)\
-                        + self.sprite_sheet.walk_frames_start
-        else:
-            frame = self.frame_number // 80
+        if not self.dead:
+            if self.change_x != 0: 
+                self.state = State.WALKING
+            else:
+                self.state = State.IDLE
+
+            # Get the correct frame number to display
+            # Idle Frames [0:2]
+            # Walking Frames [3:11]
+            self.frame_number += 3
+            if self.frame_number > 240:
+                self.frame_number = 0
+            if self.state == State.WALKING:
+                frame = ((self.walked_distance//(self.speed*self.skitter))\
+                            % self.sprite_sheet.num_walk_frames)\
+                            + self.sprite_sheet.walk_frames_start
+            else:
+                frame = self.frame_number // 80
             
 
         if self.direction is Direction.RIGHT:
@@ -172,6 +182,8 @@ class Entity(pygame.sprite.Sprite, ABC):
 
     def jump(self, level):
         """ Called when user hits 'jump' button. """
+        if self.dead:
+            return
 
         # move down a bit and see if there is a block below us.
         # Move down 2 pixels because it doesn't work well if we only move down
@@ -190,10 +202,16 @@ class Entity(pygame.sprite.Sprite, ABC):
     # Player-controlled movement:
     def go_left(self):
         """ Called when the user hits the left arrow. """
+        if self.dead:
+            return
+
         self.change_x = -self.speed
 
     def go_right(self):
         """ Called when the user hits the right arrow. """
+        if self.dead:
+            return
+
         self.change_x = self.speed
 
     def stop(self):
