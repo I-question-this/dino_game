@@ -11,7 +11,7 @@ We started with a basic 2D Platform Jumper example from [programarcadegames.com]
 
 # Demo
 We posted a [demo video](https://youtu.be/MLxx63Jur7M) of this for 
-[devpost](https://devpost.com/software/music-maker-2xf701) as part of the Hackathon
+[devpost](https://devpost.com/software/dino-hl3tig) as part of the Hackathon
 
 # Installing
 ## Pip
