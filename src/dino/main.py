@@ -49,11 +49,9 @@ def main():
     # Set the current level
     current_level_no = 0
     current_level = level_list[current_level_no]
+    # (Re) spawn the player and enemies
     current_level.reset_player(player)
-    print(type(current_level.enemy_list))
-    print(type(current_level.enemy_list.sprites()))
-    print(current_level.enemy_list.sprites())
-    for enemy in current_level.enemy_list.sprites():
+    for enemy in current_level.enemy_list:
         current_level.reset_enemy(enemy)
 
     active_sprite_list = pygame.sprite.Group()

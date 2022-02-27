@@ -9,14 +9,13 @@ class Enemy(pygame.sprite.Sprite):
         controls. """
 
     # -- Methods
-    def __init__(self, width, height, x, y):
+    def __init__(self, width, height, spawn):
         """ Constructor function """
         # Call the parent's constructor
         super().__init__()
 
-        # Set Spawn coordinate reminder
-        self.spawn_x = x
-        self.spawn_y = y
+        # Save spawn location
+        self.spawn = spawn
 
         # Set speed vector of enemy
         self.change_x = 0
@@ -91,7 +90,6 @@ class Enemy(pygame.sprite.Sprite):
         # Check and see if we hit anything
         block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
         for block in block_hit_list:
-
             # Reset our position based on the top/bottom of the object.
             if self.change_y > 0:
                 self.rect.bottom = block.rect.top

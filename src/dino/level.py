@@ -4,7 +4,7 @@ import pygame
 from dino.blocks.basic import BasicBlock
 from dino.blocks.death import DeathBlock
 from dino.blocks.invisible import InvisibleBlock
-from dino.blocks.player_spawn import PlayerSpawnBlock
+from dino.blocks.spawn import SpawnBlock
 from dino.enemy import Enemy
 from dino.constants import BLUE, PLAYER_SYMBOL, BASIC_BLOCK_SYMBOL,\
                            INVISIBLE_BLOCK_SYMBOL, DEATH_BLOCK_SYMBOL,\
@@ -30,6 +30,7 @@ class Level:
         # Load level map
         self.block_list = pygame.sprite.Group()
         self.enemy_list = pygame.sprite.Group()
+        self.spawn_list = pygame.sprite.Group()
 
         with open(map_file) as fin:
             raw_map = fin.read().split("\n")
@@ -39,9 +40,8 @@ class Level:
         tile_width_count = max(len(row) for row in raw_map)
         self.world_size = (tile_width_count * tile_width,
                         tile_height_count * tile_height)
-        self.player_spawn = self.player_spawn = PlayerSpawnBlock(0, 0, 
-                                                                 tile_width,
-                                                                 tile_height)
+        # This is default, safety value. It should not be used.
+        self.player_spawn =  SpawnBlock(0, 0, tile_width, tile_height)
 
         for row in range(len(raw_map)):
             for col in range(len(raw_map[row])):
@@ -52,9 +52,10 @@ class Level:
                 tile_symbol = raw_map[row][col]
 
                 if tile_symbol == PLAYER_SYMBOL:
-                    self.player_spawn = PlayerSpawnBlock(x, y, 
-                                                         tile_width,
-                                                         tile_height)
+                    self.player_spawn = SpawnBlock(x, y, 
+                                                   tile_width,
+                                                   tile_height)
+                    self.spawn_list.add(self.player_spawn)
                 elif tile_symbol == BASIC_BLOCK_SYMBOL:
                     self.block_list.add(BasicBlock(x, y, 
                                                    tile_width, tile_height))
@@ -65,7 +66,9 @@ class Level:
                     self.block_list.add(DeathBlock(x, y, 
                                                    tile_width, tile_height))
                 elif tile_symbol == ENEMY_SYMBOL:
-                    self.enemy_list.add(Enemy(tile_width, tile_height, x, y))
+                    spawn = SpawnBlock(x, y, tile_width, tile_height)
+                    self.spawn_list.add(spawn)
+                    self.enemy_list.add(Enemy(tile_width, tile_height, spawn))
                 elif tile_symbol == " ":
                     # Ignore empty spaces
                     pass
@@ -82,15 +85,15 @@ class Level:
 
 
     def reset_enemy(self, enemy):
-        enemy.rect.left = enemy.spawn_x
-        enemy.rect.top = enemy.spawn_y
+        enemy.rect.left = enemy.spawn.rect.left
+        enemy.rect.top = enemy.spawn.rect.top
 
     # Update everything on this level
     def update(self, player):
         """ Update everything in this level."""
         # Update world around the player
         self.block_list.update(player)
-        self.enemy_list.update()
+        self.enemy_list.update(self, player)
 
         # Determine if player has died
         if player.dead:
@@ -131,8 +134,9 @@ class Level:
         self.world_shift_y += y_diff
 
         # Go through all the sprite lists and shift
-        self.player_spawn.rect.x += x_diff
-        self.player_spawn.rect.y += y_diff
+        for spawn in self.spawn_list:
+            spawn.rect.x += x_diff
+            spawn.rect.y += y_diff
 
         for block in self.block_list:
             block.rect.x += x_diff
