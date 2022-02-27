@@ -1,5 +1,5 @@
 # Dino
-Created for the [2022 RevolutionUC Hackathon](https://revolutionuc.com/), this is a small platformer game made using [Pygame](https://www.pygame.org/)]
+Created for the [2022 RevolutionUC Hackathon](https://revolutionuc.com/), this is a small platformer game made using [Pygame](https://www.pygame.org/)
 
 # Attributions
 ## Code
