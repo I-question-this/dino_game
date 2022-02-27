@@ -1,5 +1,4 @@
 {
-  "boundary_death": ["bottom"],
-  "tile_width": 10,
-  "tile_height": 10
+  "moving_info": [
+  ]
 }

@@ -2,23 +2,18 @@ import pygame
 from dino.blocks.basic import BasicBlock
 
 class MovingBlock(BasicBlock):
-    def __init__(self, left, top, width, height, block):
+    def __init__(self, left, top, width, height, block, boundary_top,
+                 boundary_bottom, boundary_left, boundary_right, change_x, 
+                 change_y):
         super().__init__(left, top, width, height, block)
 
-        self.change_x = 1
-        self.change_y = 1
+        self.boundary_top = self.rect.top - height * boundary_top
+        self.boundary_bottom = self.rect.bottom + height * boundary_bottom
+        self.boundary_left = self.rect.left - width * boundary_left
+        self.boundary_right = self.rect.right + width * boundary_right
 
-        self.boundary_top = self.rect.top - height * 4
-        self.boundary_bottom = self.rect.bottom + height * 4
-        self.boundary_left = self.rect.left - width * 4
-        self.boundary_right = self.rect.right + width * 4
-
-        print(f"Top: {self.rect.top} -- {self.boundary_top}")
-        print(f"Bottom: {self.rect.bottom} -- {self.boundary_bottom}")
-        print(f"Left: {self.rect.left} -- {self.boundary_left}")
-        print(f"Right: {self.rect.right} -- {self.boundary_right}")
-
-
+        self.change_x = change_x
+        self.change_y = change_y
     
     def update(self, level):
         """ Move the platform.
@@ -62,10 +57,12 @@ class MovingBlock(BasicBlock):
 
         # Check the boundaries and see if we need to reverse
         # direction.
-        cur_pos_y = self.rect.y - level.world_shift_y
-        if cur_pos_y > self.boundary_bottom or cur_pos_y < self.boundary_top:
+        cur_y = self.rect.y - level.world_shift_y
+        if  cur_y < self.boundary_top or cur_y > self.boundary_bottom:
             self.change_y *= -1
 
-        cur_pos_x = self.rect.x - level.world_shift_x
-        if cur_pos_x < self.boundary_left or cur_pos_x > self.boundary_right:
+        cur_x = self.rect.x - level.world_shift_x
+        if  cur_x < self.boundary_left or cur_x > self.boundary_right:
             self.change_x *= -1
+            
+

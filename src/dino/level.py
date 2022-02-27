@@ -29,7 +29,8 @@ class Level:
         # Load level specific info
         with open(info_file) as fin:
             info = json.load(fin)
-            self.boundary_death = info["boundary_death"]
+            moving_info = info["moving_info"]
+        moving_block_index = 0
 
         # Level Complete
         self.done = False
@@ -81,8 +82,17 @@ class Level:
                     self.block_list.add(WinBlock(x, y,
                                                     tile_width, tile_height, tile_symbol))
                 elif tile_symbol == MOVING_SYMBOL:
-                    self.block_list.add(MovingBlock(x, y,
-                                                    tile_width, tile_height, tile_symbol))
+                    self.block_list.add(
+                            MovingBlock(x, y, tile_width, tile_height, 
+                                        tile_symbol,
+                                        moving_info[moving_block_index]["top"],
+                                        moving_info[moving_block_index]["bottom"],
+                                        moving_info[moving_block_index]["left"],
+                                        moving_info[moving_block_index]["right"],
+                                        moving_info[moving_block_index]["change_x"],
+                                        moving_info[moving_block_index]["change_y"]
+                                        ))
+                    moving_block_index += 1
                 elif tile_symbol == " ":
                     # Ignore empty spaces
                     pass

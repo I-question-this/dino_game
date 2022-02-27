@@ -45,7 +45,7 @@ def main():
                             LEVEL_2_MAP, LEVEL_2_INFO))
 
     # Set the current level
-    current_level_no = 0
+    current_level_no = 1
     current_level = level_list[current_level_no]
 
     # Loop until the user clicks the close button.
