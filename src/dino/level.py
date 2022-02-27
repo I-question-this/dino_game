@@ -4,13 +4,14 @@ import pygame
 from dino.blocks.basic import BasicBlock
 from dino.blocks.death import DeathBlock
 from dino.blocks.invisible import InvisibleBlock
+from dino.blocks.moving import MovingBlock
 from dino.blocks.spawn import SpawnBlock
 from dino.blocks.win import WinBlock
 from dino.entities.enemy import Enemy
 from dino.entities.player import Player
 from dino.constants import BLUE, PLAYER_SYMBOL, BASIC_BLOCK_SYMBOLS,\
                            INVISIBLE_BLOCK_SYMBOL, DEATH_BLOCK_SYMBOL,\
-                           ENEMY_SYMBOL, WIN_SYMBOL
+                           ENEMY_SYMBOL, WIN_SYMBOL, MOVING_SYMBOL
 
 
 
@@ -78,6 +79,9 @@ class Level:
                     self.enemy_list.add(Enemy(tile_width, tile_height, spawn))
                 elif tile_symbol == WIN_SYMBOL:
                     self.block_list.add(WinBlock(x, y,
+                                                    tile_width, tile_height, tile_symbol))
+                elif tile_symbol == MOVING_SYMBOL:
+                    self.block_list.add(MovingBlock(x, y,
                                                     tile_width, tile_height, tile_symbol))
                 elif tile_symbol == " ":
                     # Ignore empty spaces
