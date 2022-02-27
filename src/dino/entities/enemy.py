@@ -67,3 +67,21 @@ class Enemy(Entity):
 
         if len(x_axis_block_hit_list) > 0:
             self.turn_around()
+
+        # Move Horizontally a little bit and check whether any blocks are collided with
+        if self.direction == Direction.LEFT:
+            self.rect.x -= 48
+            self.rect.y += 2
+            block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
+            self.rect.x += 48
+        else:
+            self.rect.x += 48
+            self.rect.y += 2
+            block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
+            self.rect.x -= 48
+        
+        self.rect.y -= 2
+
+        # If it is ok to jump, set our speed upwards
+        if len(block_hit_list) == 0:
+            self.turn_around()

@@ -1,5 +1,6 @@
 import json
 import pygame
+import random
 
 from dino.blocks.basic import BasicBlock
 from dino.blocks.death import DeathBlock
@@ -11,9 +12,10 @@ from dino.entities.enemy import Enemy
 from dino.entities.player import Player
 from dino.constants import BLUE, PLAYER_SYMBOL, BASIC_BLOCK_SYMBOLS,\
                            INVISIBLE_BLOCK_SYMBOL, DEATH_BLOCK_SYMBOL,\
-                           ENEMY_SYMBOL, WIN_SYMBOL, MOVING_SYMBOL
-
-
+                           ENEMY_SYMBOL, WIN_SYMBOL, MOVING_SYMBOL, \
+                           TILE_HEIGHT, TILE_WIDTH, \
+                           SCREEN_WIDTH, SCREEN_HEIGHT
+from dino.assets import BACKGROUNDS_JUNGLE, BACKGROUNDS_SNOW, BACKGROUNDS_DESERT, BACKGROUNDS_SKY
 
 class Level:
     def __init__(self, view, tile_width, tile_height, map_file, info_file):
@@ -103,6 +105,11 @@ class Level:
         self.player = Player(tile_width, tile_height, self.player_spawn)
         self.player_list.add(self.player)
 
+        # Set a theme for the level 
+        self.theme = random.choice([BACKGROUNDS_SKY, BACKGROUNDS_DESERT, 
+                                        BACKGROUNDS_JUNGLE, BACKGROUNDS_SNOW])
+        # Create the background image sequence for the level
+        self.background = self.create_background()
 
     def reset_player(self):
         self.player.revive()
@@ -173,11 +180,28 @@ class Level:
 
     def draw(self, screen):
         """ Draw everything on this level. """
-
         # Draw the background
-        screen.fill(BLUE)
+        self.draw_background(screen)
 
         # Draw all the sprite lists that we have
         self.block_list.draw(screen)
         self.enemy_list.draw(screen)
         self.player_list.draw(screen)
+
+    def draw_background(self, screen):
+        # Copy the sprites from the sequence onto the screen
+        screen.blits(self.background)
+
+    def create_background(self):
+        # Create a new blank image
+        images = [pygame.image.load(self.theme[x]).convert_alpha() for x in range(len(self.theme))]
+        images =  [pygame.transform.scale(image, (TILE_WIDTH, TILE_HEIGHT)) for image in images]
+ 
+        rows = (SCREEN_WIDTH // TILE_WIDTH) + 1
+        cols = (SCREEN_HEIGHT // TILE_HEIGHT) + 1
+        # Create blits sequence
+        blit_list = []
+        for row in range(0, rows):
+            for col in range(0, cols):
+                blit_list.append([random.choice(images), (48*row, 48*col)])
+        return blit_list
