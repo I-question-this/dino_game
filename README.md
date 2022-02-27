@@ -10,7 +10,7 @@ We started with a basic 2D Platform Jumper example from [programarcadegames.com]
 + [Pixel Platformer](https://kenney-assets.itch.io/pixel-platformer)
 
 # Demo
-We posted a [demo video](https://youtu.be/MLxx63Jur7M) of this for 
+We posted a [demo video](https://www.youtube.com/watch?v=5_PYsmJAG3w) of this for 
 [devpost](https://devpost.com/software/dino-hl3tig) as part of the Hackathon
 
 # Installing
