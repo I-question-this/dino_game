@@ -39,9 +39,12 @@ BASIC_BLOCK_FILES = {
     "W":os.path.join(SPRITES_DIR, "Tiles/tile_0130.png")
 }
 
-DIRT_BLOCK_FILES = [os.path.join(SPRITES_DIR, "Tiles/tile_0002.png"),
-    os.path.join(SPRITES_DIR, "Tiles/tile_0005.png"),
-    os.path.join(SPRITES_DIR, "Tiles/tile_0024.png"),
-    os.path.join(SPRITES_DIR, "Tiles/tile_0025.png"),
+DIRT_BLOCK_FILES = [
     os.path.join(SPRITES_DIR, "Tiles/tile_0122.png")
 ]
+
+# THESE SABOTEURS HAVE TINY CORNERS!
+# os.path.join(SPRITES_DIR, "Tiles/tile_0004.png"),
+# os.path.join(SPRITES_DIR, "Tiles/tile_0005.png"),
+# os.path.join(SPRITES_DIR, "Tiles/tile_0024.png"),
+# os.path.join(SPRITES_DIR, "Tiles/tile_0025.png"),
