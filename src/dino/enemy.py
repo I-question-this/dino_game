@@ -57,13 +57,6 @@ class Enemy(pygame.sprite.Sprite):
         else:
             self.go_right()
         
-        block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
-        # Check and see if we would walk off the box
-        for block in block_hit_list:
-            if (self.rect.x + self.change_x > block.rect.right) or (self.rect.x + self.change_x < block.rect.left):
-                # Enemy would walk off the side of the box. Turn around
-                self.change_x = -self.change_x
-
         # Change Direction
         if self.change_x > 0:
             self.direction = 'R'

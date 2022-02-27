@@ -22,7 +22,7 @@ TILE_HEIGHT = 48
 
 # Tile Symbols
 PLAYER_SYMBOL = "P"
-BASIC_BLOCK_SYMBOL = "B"
 INVISIBLE_BLOCK_SYMBOL = "I"
 DEATH_BLOCK_SYMBOL = "D"
 ENEMY_SYMBOL = "E"
+BASIC_BLOCK_SYMBOLS = ["T", "R", "G", "l", "g", "r", "B", "t", "L", "b"]
