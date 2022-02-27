@@ -12,7 +12,7 @@ from dino.entities.enemy import Enemy
 from dino.entities.player import Player
 from dino.constants import BLUE, PLAYER_SYMBOL, BASIC_BLOCK_SYMBOLS,\
                            INVISIBLE_BLOCK_SYMBOL, DEATH_BLOCK_SYMBOL,\
-                           ENEMY_SYMBOL, WIN_SYMBOL, MOVING_SYMBOL, \
+                           ENEMY_SYMBOLS, WIN_SYMBOL, MOVING_SYMBOL, \
                            TILE_HEIGHT, TILE_WIDTH, \
                            SCREEN_WIDTH, SCREEN_HEIGHT
 from dino.assets import BACKGROUNDS_JUNGLE, BACKGROUNDS_SNOW, BACKGROUNDS_DESERT, BACKGROUNDS_SKY
@@ -75,10 +75,10 @@ class Level:
                 elif tile_symbol == DEATH_BLOCK_SYMBOL:
                     self.block_list.add(DeathBlock(x, y, 
                                                    tile_width, tile_height))
-                elif tile_symbol == ENEMY_SYMBOL:
+                elif tile_symbol in ENEMY_SYMBOLS:
                     spawn = SpawnBlock(x, y, tile_width, tile_height)
                     self.spawn_list.add(spawn)
-                    self.enemy_list.add(Enemy(tile_width, tile_height, spawn))
+                    self.enemy_list.add(Enemy(tile_width, tile_height, spawn, tile_symbol))
                 elif tile_symbol == WIN_SYMBOL:
                     self.block_list.add(WinBlock(x, y,
                                                     tile_width, tile_height, tile_symbol))

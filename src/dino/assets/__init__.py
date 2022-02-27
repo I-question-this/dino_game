@@ -17,7 +17,8 @@ LEVEL_1_INFO = os.path.join(LEVEL_DIR, "level_1.json")
 LEVEL_1_MAP = os.path.join(LEVEL_DIR, "level_1.lvl")
 LEVEL_2_INFO = os.path.join(LEVEL_DIR, "level_2.json")
 LEVEL_2_MAP = os.path.join(LEVEL_DIR, "level_2.lvl")
-
+LEVEL_3_INFO = os.path.join(LEVEL_DIR, "level_3.json")
+LEVEL_3_MAP = os.path.join(LEVEL_DIR, "level_3.lvl")
 
 # Tile Files
 BASIC_BLOCK_FILES = {

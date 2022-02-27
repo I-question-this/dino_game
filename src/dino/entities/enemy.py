@@ -1,5 +1,5 @@
 import pygame
-from dino.assets.sprites.dinos import DINO_BART_FRAMES
+from dino.assets.sprites.dinos import DINO_BART_FRAMES, DINO_MORT_FRAMES
 from dino.entities.entity import Entity, Direction
 
 
@@ -7,11 +7,18 @@ class Enemy(Entity):
     """ This class represents the bar at the bottom that the player
         controls. """
 
-    def __init__(self, width, height, spawn):
-        super().__init__(width, height, spawn, 2, 10, 2)
+    def __init__(self, width, height, spawn, enemy_type):
+        self.enemy = enemy_type
+        if self.enemy == "E":
+            super().__init__(width, height, spawn, 2, 10, 2)
+        else:
+            super().__init__(width, height, spawn, 4, 10, 4)
 
     def load_spritesheet(self, width, height):
-        self.sprite_sheet = DINO_BART_FRAMES(width, height)
+        if self.enemy == "E":
+            self.sprite_sheet = DINO_BART_FRAMES(width, height)
+        else:
+            self.sprite_sheet = DINO_MORT_FRAMES(width, height)
 
     def update(self, level):
         """ Move the Enemy. """
