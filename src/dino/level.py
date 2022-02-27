@@ -124,10 +124,6 @@ class Level:
         self.block_list.update(self)
         self.enemy_list.update(self)
 
-        # Determine if player has died
-        if self.player.dead:
-            self.reset_player()
-
         # Check if player has gone way out of the world
         if abs(self.player.rect.right - self.player_spawn.rect.right)\
                 > self.world_size[0]\

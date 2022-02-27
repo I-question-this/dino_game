@@ -7,6 +7,7 @@ class SpriteSheet(ABC):
     """ Class used to grab images out of a sprite sheet. """
  
     def __init__(self, file_name, walk_frames_start, num_walk_frames,
+                 death_frames_start, num_death_frames,
                  entity_width, entity_height):
         """ Constructor. Pass in the file name of the sprite sheet. """
 
@@ -17,6 +18,8 @@ class SpriteSheet(ABC):
         # Save frame information
         self.walk_frames_start = walk_frames_start
         self.num_walk_frames = num_walk_frames
+        self.death_frames_start = death_frames_start
+        self.num_death_frames = num_death_frames
 
         # Load the sprite sheet.
         self.sprite_sheet = pygame.image.load(file_name).convert_alpha()
