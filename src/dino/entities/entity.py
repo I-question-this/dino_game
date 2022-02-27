@@ -92,8 +92,9 @@ class Entity(pygame.sprite.Sprite, ABC):
             self.direction = Direction.LEFT        
 
         # See if we hit anything
-        block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
-        for block in block_hit_list:
+        x_axis_block_hit_list = pygame.sprite.spritecollide(self, 
+                level.block_list, False)
+        for block in x_axis_block_hit_list:
             if isinstance(block, DeathBlock):
                 self.dead = True
 
@@ -109,8 +110,9 @@ class Entity(pygame.sprite.Sprite, ABC):
         self.rect.y += self.change_y
 
         # Check and see if we hit anything
-        block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
-        for block in block_hit_list:
+        y_axis_block_hit_list = pygame.sprite.spritecollide(self, 
+                level.block_list, False)
+        for block in y_axis_block_hit_list:
             if isinstance(block, DeathBlock):
                 self.dead = True
 
@@ -149,6 +151,8 @@ class Entity(pygame.sprite.Sprite, ABC):
             self.image = self.frames[frame]
         else:
             self.image = pygame.transform.flip(self.frames[frame], True, False)
+
+        return x_axis_block_hit_list, y_axis_block_hit_list
 
     def calc_grav(self):
         """ Calculate effect of gravity. """

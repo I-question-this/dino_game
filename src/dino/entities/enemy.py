@@ -2,7 +2,6 @@ import pygame
 from dino.assets.sprites.dinos import DINO_BART_FRAMES
 from dino.entities.entity import Entity, Direction
 
-# TODO SWITCH DIRECTION NOT JUST WHEN FALLING BUT ALSO WHEN COLLIDING IN X DIR
 
 class Enemy(Entity):
     """ This class represents the bar at the bottom that the player
@@ -22,5 +21,11 @@ class Enemy(Entity):
         else:
             self.go_right()
 
-        super().update(level)
+        x_axis_block_hit_list, y_axis_block_hit_list = super().update(level)
+
+        if len(x_axis_block_hit_list) > 0:
+            if self.direction == Direction.LEFT:
+                self.direction = Direction.RIGHT
+            else:
+                self.direction = Direction.LEFT
 
