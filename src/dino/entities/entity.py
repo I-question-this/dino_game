@@ -1,14 +1,27 @@
+from abc import ABC, abstractmethod
+from enum import Enum, auto
 import pygame
-from dino.assets.sprites.dinos import DINO_DOUX_FRAMES
+
+from dino.assets import DINO_DOUX
 from dino.blocks.death import DeathBlock
 
 
-class Player(pygame.sprite.Sprite):
+class Direction(Enum):
+    RIGHT = auto()
+    LEFT = auto()
+
+
+class State(Enum):
+    IDLE = auto()
+    WALKING = auto()
+
+
+class Entity(pygame.sprite.Sprite, ABC):
     """ This class represents the bar at the bottom that the player
         controls. """
 
     # -- Methods
-    def __init__(self, width, height):
+    def __init__(self, width, height, spawn, speed, jump_speed):
         """ Constructor function """
 
         # Call the parent's constructor
@@ -17,20 +30,33 @@ class Player(pygame.sprite.Sprite):
         # Set death status
         self.dead = False
 
-        # Set speed vector of player
+        # Save spawn point
+        self.spawn = spawn
+
+        # Set speed vector of entity
         self.change_x = 0
         self.change_y = 0
+        self.speed = speed
+        self.jump_speed = jump_speed
 
         # Set double jump
         self.double_jump_available = True
 
-        # List of all the frames for the little dino
-        # Load the sprite sheet image and extract images; (x, y, width, height)
-        sprite_sheet = DINO_DOUX_FRAMES(width, height)
-        self.frames = sprite_sheet.frames
+        # Load sprite sheet
+        self.load_spritesheet(width, height)
+        # load frames
+        self.frames = self.sprite_sheet.frames
 
+        # Set initial values
+        self.revive()
+
+    @abstractmethod
+    def load_spritesheet(self, width, height):
+        ...
+
+    def revive(self):
         # Set direction
-        self.direction = 'R' # Faces 'R'ight or 'L'eft
+        self.direction = Direction.RIGHT
 
         # Set the image the player starts with
         self.image = self.frames[0]
@@ -38,12 +64,15 @@ class Player(pygame.sprite.Sprite):
         # Set a reference to the image rect.
         self.rect = self.image.get_rect()
 
-        # Set player state to determine which frames to play
-        self.state = 'Idle' # Options: Walking, Idle
+        # Set location
+        self.rect.left = self.spawn.rect.left
+        self.rect.top = self.spawn.rect.top
+
+        # Set animation state
+        self.state = State.IDLE
         self.frame_number = 0
 
-
-    def revive(self):
+        # Set status values
         self.dead = False
         self.double_jump_available = True
 
@@ -58,9 +87,9 @@ class Player(pygame.sprite.Sprite):
 
         # Change Direction
         if self.change_x > 0:
-            self.direction = 'R'
+            self.direction = Direction.RIGHT
         elif self.change_x < 0:
-            self.direction = 'L'        
+            self.direction = Direction.LEFT        
 
         # See if we hit anything
         block_hit_list = pygame.sprite.spritecollide(self, level.block_list, False)
@@ -98,9 +127,9 @@ class Player(pygame.sprite.Sprite):
 
         # First check jumping, then other states.
         if self.change_x != 0: 
-            self.state = 'Walking'
+            self.state = State.WALKING
         else:
-            self.state = 'Idle'
+            self.state = State.IDLE
 
         # Get the correct frame number to display
         # Idle Frames [0:2]
@@ -108,7 +137,7 @@ class Player(pygame.sprite.Sprite):
         self.frame_number += 3
         if self.frame_number > 240:
             self.frame_number = 0
-        if self.state == 'Walking':
+        if self.state == State.WALKING:
             # walk_frames = self.frames[3:11]
             walk_frames = self.frames[3:]
             frame = (((self.rect.x + level.world_shift_x + self.frame_number) // 30) % len(walk_frames)) + 3
@@ -116,7 +145,7 @@ class Player(pygame.sprite.Sprite):
             frame = self.frame_number // 80
             
 
-        if self.direction is 'R':
+        if self.direction is Direction.RIGHT:
             self.image = self.frames[frame]
         else:
             self.image = pygame.transform.flip(self.frames[frame], True, False)
@@ -140,19 +169,19 @@ class Player(pygame.sprite.Sprite):
 
         # If it is ok to jump, set our speed upwards
         if len(block_hit_list) > 0:
-            self.change_y = -10
+            self.change_y = -self.jump_speed
         elif self.double_jump_available:
-            self.change_y = -10
+            self.change_y = -self.jump_speed
             self.double_jump_available = False
 
     # Player-controlled movement:
     def go_left(self):
         """ Called when the user hits the left arrow. """
-        self.change_x = -6
+        self.change_x = -self.speed
 
     def go_right(self):
         """ Called when the user hits the right arrow. """
-        self.change_x = 6
+        self.change_x = self.speed
 
     def stop(self):
         """ Called when the user lets off the keyboard. """

@@ -24,7 +24,6 @@ import pygame
 
 from dino.assets import LEVEL_1_INFO, LEVEL_1_MAP
 from dino.level import Level
-from dino.player import Player
 from dino.constants import SCREEN_WIDTH, SCREEN_HEIGHT, VIEW_RECT,\
                            TILE_WIDTH, TILE_HEIGHT
 
@@ -38,9 +37,6 @@ def main():
 
     pygame.display.set_caption("Platformer Jumper")
 
-    # Create the player
-    player = Player(TILE_WIDTH, TILE_HEIGHT)
-
     # Create all the levels
     level_list = []
     level_list.append(Level(VIEW_RECT, TILE_WIDTH, TILE_HEIGHT, 
@@ -49,15 +45,6 @@ def main():
     # Set the current level
     current_level_no = 0
     current_level = level_list[current_level_no]
-    # (Re) spawn the player and enemies
-    current_level.reset_player(player)
-    for enemy in current_level.enemy_list:
-        current_level.reset_enemy(enemy)
-
-    active_sprite_list = pygame.sprite.Group()
-
-    # Setting the starting player location should be part of the level.
-    active_sprite_list.add(player)
 
     # Loop until the user clicks the close button.
     done = False
@@ -73,27 +60,25 @@ def main():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    player.go_left()
+                    current_level.player.go_left()
                 if event.key == pygame.K_RIGHT:
-                    player.go_right()
+                    current_level.player.go_right()
                 if event.key == pygame.K_UP:
-                    player.jump(current_level)
+                    current_level.player.jump(current_level)
 
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT and player.change_x < 0:
-                    player.stop()
-                if event.key == pygame.K_RIGHT and player.change_x > 0:
-                    player.stop()
+                if event.key == pygame.K_LEFT\
+                        and current_level.player.change_x < 0:
+                    current_level.player.stop()
+                if event.key == pygame.K_RIGHT\
+                        and current_level.player.change_x > 0:
+                    current_level.player.stop()
 
-        # Update the player.
-        active_sprite_list.update(current_level)
+        # Update the level
+        current_level.update()
 
-        # Update items in the level
-        current_level.update(player)
-
-        # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
+        # Draw the level
         current_level.draw(screen)
-        active_sprite_list.draw(screen)
 
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
 

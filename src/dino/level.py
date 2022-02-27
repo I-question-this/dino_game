@@ -5,7 +5,8 @@ from dino.blocks.basic import BasicBlock
 from dino.blocks.death import DeathBlock
 from dino.blocks.invisible import InvisibleBlock
 from dino.blocks.spawn import SpawnBlock
-from dino.enemy import Enemy
+from dino.entities.enemy import Enemy
+from dino.entities.player import Player
 from dino.constants import BLUE, PLAYER_SYMBOL, BASIC_BLOCK_SYMBOL,\
                            INVISIBLE_BLOCK_SYMBOL, DEATH_BLOCK_SYMBOL,\
                            ENEMY_SYMBOL
@@ -31,6 +32,7 @@ class Level:
         self.block_list = pygame.sprite.Group()
         self.enemy_list = pygame.sprite.Group()
         self.spawn_list = pygame.sprite.Group()
+        self.player_list = pygame.sprite.Group()
 
         with open(map_file) as fin:
             raw_map = fin.read().split("\n")
@@ -41,7 +43,7 @@ class Level:
         self.world_size = (tile_width_count * tile_width,
                         tile_height_count * tile_height)
         # This is default, safety value. It should not be used.
-        self.player_spawn =  SpawnBlock(0, 0, tile_width, tile_height)
+        self.player_spawn = SpawnBlock(0, 0, tile_width, tile_height)
 
         for row in range(len(raw_map)):
             for col in range(len(raw_map[row])):
@@ -75,58 +77,61 @@ class Level:
                 else:
                     raise ValueError(f"Unknown tile symbol: {tile_symbol}")
 
+        # Create player
+        self.player = Player(tile_width, tile_height, self.player_spawn)
+        self.player_list.add(self.player)
 
-    def reset_player(self, player):
-        player.rect.left = self.player_spawn.rect.left
-        player.rect.top = self.player_spawn.rect.top
-        player.revive()
+
+    def reset_player(self):
+        self.player.revive()
         self.world_shift_x = 0
         self.world_shift_y = 0
 
-
     def reset_enemy(self, enemy):
-        enemy.rect.left = enemy.spawn.rect.left
-        enemy.rect.top = enemy.spawn.rect.top
+        enemy.revive()
 
     # Update everything on this level
-    def update(self, player):
+    def update(self):
         """ Update everything in this level."""
         # Update world around the player
-        self.block_list.update(player)
-        self.enemy_list.update(self, player)
+        self.block_list.update(self.player)
+        self.enemy_list.update(self)
 
         # Determine if player has died
-        if player.dead:
-            self.reset_player(player)
+        if self.player.dead:
+            self.reset_player()
 
         # Check if player has gone way out of the world
-        if abs(player.rect.right - self.player_spawn.rect.right)\
+        if abs(self.player.rect.right - self.player_spawn.rect.right)\
                 > self.world_size[0]\
-            or abs(player.rect.top - self.player_spawn.rect.top)\
+            or abs(self.player.rect.top - self.player_spawn.rect.top)\
                 > self.world_size[1]:
-                self.reset_player(player)
+                self.reset_player()
 
         # Determine if player has left the world view
         x_diff = 0
         y_diff = 0
 
-        if player.rect.right >= self.view.right:
-            x_diff = self.view.right - player.rect.right
-            player.rect.right = self.view.right
+        if self.player.rect.right >= self.view.right:
+            x_diff = self.view.right - self.player.rect.right
+            self.player.rect.right = self.view.right
 
-        if player.rect.left <= self.view.left:
-            x_diff = self.view.left - player.rect.left
-            player.rect.left = self.view.left
+        if self.player.rect.left <= self.view.left:
+            x_diff = self.view.left - self.player.rect.left
+            self.player.rect.left = self.view.left
 
-        if player.rect.top <= self.view.top:
-            y_diff = self.view.top - player.rect.top
-            player.rect.top = self.view.top
+        if self.player.rect.top <= self.view.top:
+            y_diff = self.view.top - self.player.rect.top
+            self.player.rect.top = self.view.top
 
-        if player.rect.bottom >= self.view.bottom:
-            y_diff = self.view.bottom - player.rect.bottom
-            player.rect.bottom = self.view.bottom
+        if self.player.rect.bottom >= self.view.bottom:
+            y_diff = self.view.bottom - self.player.rect.bottom
+            self.player.rect.bottom = self.view.bottom
 
         self.shift_world(x_diff, y_diff)
+
+        # Update the player
+        self.player.update(self)
 
     # Shift everything but the player in this world
     def shift_world(self, x_diff, y_diff):
@@ -155,3 +160,4 @@ class Level:
         # Draw all the sprite lists that we have
         self.block_list.draw(screen)
         self.enemy_list.draw(screen)
+        self.player_list.draw(screen)
