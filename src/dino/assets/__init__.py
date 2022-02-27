@@ -27,10 +27,18 @@ BASIC_BLOCK_FILES = {
     "B":os.path.join(SPRITES_DIR, "Tiles/tile_0006.png"),
     "t":os.path.join(SPRITES_DIR, "Tiles/tile_0020.png"),
     "L":os.path.join(SPRITES_DIR, "Tiles/tile_0021.png"),
+
+    "O":os.path.join(SPRITES_DIR, "Tiles/tile_0142.png"),
+    "n":os.path.join(SPRITES_DIR, "Tiles/tile_0143.png"),
+    "N":os.path.join(SPRITES_DIR, "Tiles/tile_0141.png"),
+    "q":os.path.join(SPRITES_DIR, "Tiles/tile_0121.png"),
+    "Q":os.path.join(SPRITES_DIR, "Tiles/tile_0123.png"),
+    "o":os.path.join(SPRITES_DIR, "Tiles/tile_0120.png"),
 }
 
 DIRT_BLOCK_FILES = [os.path.join(SPRITES_DIR, "Tiles/tile_0002.png"),
     os.path.join(SPRITES_DIR, "Tiles/tile_0005.png"),
     os.path.join(SPRITES_DIR, "Tiles/tile_0024.png"),
     os.path.join(SPRITES_DIR, "Tiles/tile_0025.png"),
+    os.path.join(SPRITES_DIR, "Tiles/tile_0122.png")
 ]
