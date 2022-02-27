@@ -96,8 +96,6 @@ class Level:
 
     def reset_player(self):
         self.player.revive()
-        self.world_shift_x = 0
-        self.world_shift_y = 0
 
     def reset_enemy(self, enemy):
         enemy.revive()
