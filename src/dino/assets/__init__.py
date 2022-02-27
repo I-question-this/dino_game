@@ -37,6 +37,7 @@ BASIC_BLOCK_FILES = {
     "Q":os.path.join(SPRITES_DIR, "Tiles/tile_0123.png"),
     "o":os.path.join(SPRITES_DIR, "Tiles/tile_0120.png"),
     "W":os.path.join(SPRITES_DIR, "Tiles/tile_0130.png"),
+    "M":os.path.join(SPRITES_DIR, "Tiles/tile_0047.png")
 }
 
 DIRT_BLOCK_FILES = [

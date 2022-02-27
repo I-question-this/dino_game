@@ -106,7 +106,7 @@ class Level:
     def update(self):
         """ Update everything in this level."""
         # Update world around the player
-        self.block_list.update(self.player)
+        self.block_list.update(self)
         self.enemy_list.update(self)
 
         # Determine if player has died
