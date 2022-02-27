@@ -80,9 +80,10 @@ def main():
         current_level.update()
         if current_level.done:
             current_level_no += 1
-            if current_level_no > len(level_list):
-                pygame.quit()
-            current_level = level_list[current_level_no]
+            if current_level_no >= len(level_list):
+                done = True
+            else:
+                current_level = level_list[current_level_no]
 
         # Draw the level
         current_level.draw(screen)
