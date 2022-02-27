@@ -7,7 +7,7 @@ class Player(Entity):
     """ This class represents the bar at the bottom that the player
         controls. """
     def __init__(self, width, height, spawn):
-        super().__init__(width, height, spawn, 6, 10)
+        super().__init__(width, height, spawn, 6, 10, 8)
 
     def load_spritesheet(self, width, height):
         self.sprite_sheet = DINO_DOUX_FRAMES(width, height)

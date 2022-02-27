@@ -21,7 +21,7 @@ class Entity(pygame.sprite.Sprite, ABC):
         controls. """
 
     # -- Methods
-    def __init__(self, width, height, spawn, speed, jump_speed):
+    def __init__(self, width, height, spawn, speed, jump_speed, skitter):
         """ Constructor function """
 
         # Call the parent's constructor
@@ -38,6 +38,7 @@ class Entity(pygame.sprite.Sprite, ABC):
         self.change_y = 0
         self.speed = speed
         self.jump_speed = jump_speed
+        self.skitter = skitter
 
         # Set double jump
         self.double_jump_available = True
@@ -71,11 +72,18 @@ class Entity(pygame.sprite.Sprite, ABC):
         # Set animation state
         self.state = State.IDLE
         self.frame_number = 0
+        self.walked_distance = 1
 
         # Set status values
         self.dead = False
         self.double_jump_available = True
 
+    def turn_around(self):
+        self.walked_distance = 1
+        if self.direction == Direction.LEFT:
+            self.direction = Direction.RIGHT
+        else:
+            self.direction = Direction.LEFT
 
     def update(self, level):
         """ Move the player. """
@@ -84,6 +92,7 @@ class Entity(pygame.sprite.Sprite, ABC):
 
         # Move left/right
         self.rect.x += self.change_x
+        self.walked_distance += self.change_x
 
         # Change Direction
         if self.change_x > 0:
@@ -140,9 +149,9 @@ class Entity(pygame.sprite.Sprite, ABC):
         if self.frame_number > 240:
             self.frame_number = 0
         if self.state == State.WALKING:
-            # walk_frames = self.frames[3:11]
-            walk_frames = self.frames[3:]
-            frame = (((self.rect.x + level.world_shift_x + self.frame_number) // 30) % len(walk_frames)) + 3
+            frame = ((self.walked_distance//(self.speed*self.skitter))\
+                        % self.sprite_sheet.num_walk_frames)\
+                        + self.sprite_sheet.walk_frames_start
         else:
             frame = self.frame_number // 80
             

@@ -8,7 +8,7 @@ class Enemy(Entity):
         controls. """
 
     def __init__(self, width, height, spawn):
-        super().__init__(width, height, spawn, 2, 10)
+        super().__init__(width, height, spawn, 2, 10, 2)
 
     def load_spritesheet(self, width, height):
         self.sprite_sheet = DINO_BART_FRAMES(width, height)
@@ -24,8 +24,4 @@ class Enemy(Entity):
         x_axis_block_hit_list, y_axis_block_hit_list = super().update(level)
 
         if len(x_axis_block_hit_list) > 0:
-            if self.direction == Direction.LEFT:
-                self.direction = Direction.RIGHT
-            else:
-                self.direction = Direction.LEFT
-
+            self.turn_around()

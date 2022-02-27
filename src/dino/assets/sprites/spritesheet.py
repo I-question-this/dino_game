@@ -6,12 +6,17 @@ from dino.constants import BLACK
 class SpriteSheet(ABC):
     """ Class used to grab images out of a sprite sheet. """
  
-    def __init__(self, file_name, entity_width, entity_height):
+    def __init__(self, file_name, walk_frames_start, num_walk_frames,
+                 entity_width, entity_height):
         """ Constructor. Pass in the file name of the sprite sheet. """
 
         # Save widths/heights
         self.entity_width = entity_width
         self.entity_height = entity_height
+
+        # Save frame information
+        self.walk_frames_start = walk_frames_start
+        self.num_walk_frames = num_walk_frames
 
         # Load the sprite sheet.
         self.sprite_sheet = pygame.image.load(file_name).convert_alpha()
