@@ -27,4 +27,5 @@ DEATH_BLOCK_SYMBOL = "D"
 ENEMY_SYMBOLS = ["E", "e"]
 WIN_SYMBOL = "W"
 MOVING_SYMBOL = "M"
-BASIC_BLOCK_SYMBOLS = ["T", "R", "G", "l", "g", "r", "B", "t", "L", "b", "O", "o", "N", "n", "q", "Q"]
+BASIC_BLOCK_SYMBOLS = ["T", "R", "G", "l", "g", "r", "B", "t", "L", "b", "O", "o", "N", 
+                        "n", "q", "Q", "U", "u", "V", "v"]

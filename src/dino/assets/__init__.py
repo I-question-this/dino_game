@@ -19,6 +19,9 @@ LEVEL_2_INFO = os.path.join(LEVEL_DIR, "level_2.json")
 LEVEL_2_MAP = os.path.join(LEVEL_DIR, "level_2.lvl")
 LEVEL_3_INFO = os.path.join(LEVEL_DIR, "level_3.json")
 LEVEL_3_MAP = os.path.join(LEVEL_DIR, "level_3.lvl")
+LEVEL_4_INFO = os.path.join(LEVEL_DIR, "level_4.json")
+LEVEL_4_MAP = os.path.join(LEVEL_DIR, "level_4.lvl")
+
 
 # Tile Files
 BASIC_BLOCK_FILES = {
@@ -38,7 +41,11 @@ BASIC_BLOCK_FILES = {
     "Q":os.path.join(SPRITES_DIR, "Tiles/tile_0123.png"),
     "o":os.path.join(SPRITES_DIR, "Tiles/tile_0120.png"),
     "W":os.path.join(SPRITES_DIR, "Tiles/tile_0130.png"),
-    "M":os.path.join(SPRITES_DIR, "Tiles/tile_0047.png")
+    "M":os.path.join(SPRITES_DIR, "Tiles/tile_0047.png"),
+    "U":os.path.join(SPRITES_DIR, "Tiles/tile_0113.png"),
+    "u":os.path.join(SPRITES_DIR, "Tiles/tile_0114.png"),
+    "V":os.path.join(SPRITES_DIR, "Tiles/tile_0133.png"),
+    "v":os.path.join(SPRITES_DIR, "Tiles/tile_0115.png")
 }
 
 DIRT_BLOCK_FILES = [
