@@ -18,6 +18,8 @@ http://programarcadegames.com/python_examples/f.php?file=platform_moving.py
 http://programarcadegames.com/python_examples/sprite_sheets/
 """
 
+from queue import Empty
+from xml.dom.minicompat import EmptyNodeList
 import pygame
 
 from dino.assets import LEVEL_1_INFO, LEVEL_1_MAP
@@ -48,6 +50,11 @@ def main():
     current_level_no = 0
     current_level = level_list[current_level_no]
     current_level.reset_player(player)
+    print(type(current_level.enemy_list))
+    print(type(current_level.enemy_list.sprites()))
+    print(current_level.enemy_list.sprites())
+    for enemy in current_level.enemy_list.sprites():
+        current_level.reset_enemy(enemy)
 
     active_sprite_list = pygame.sprite.Group()
 

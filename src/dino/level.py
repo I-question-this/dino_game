@@ -5,8 +5,10 @@ from dino.blocks.basic import BasicBlock
 from dino.blocks.death import DeathBlock
 from dino.blocks.invisible import InvisibleBlock
 from dino.blocks.player_spawn import PlayerSpawnBlock
+from dino.enemy import Enemy
 from dino.constants import BLUE, PLAYER_SYMBOL, BASIC_BLOCK_SYMBOL,\
-                           INVISIBLE_BLOCK_SYMBOL, DEATH_BLOCK_SYMBOL
+                           INVISIBLE_BLOCK_SYMBOL, DEATH_BLOCK_SYMBOL,\
+                           ENEMY_SYMBOL
 
 
 class Level:
@@ -62,6 +64,8 @@ class Level:
                 elif tile_symbol == DEATH_BLOCK_SYMBOL:
                     self.block_list.add(DeathBlock(x, y, 
                                                    tile_width, tile_height))
+                elif tile_symbol == ENEMY_SYMBOL:
+                    self.enemy_list.add(Enemy(tile_width, tile_height, x, y))
                 elif tile_symbol == " ":
                     # Ignore empty spaces
                     pass
@@ -76,6 +80,10 @@ class Level:
         self.world_shift_x = 0
         self.world_shift_y = 0
 
+
+    def reset_enemy(self, enemy):
+        enemy.rect.left = enemy.spawn_x
+        enemy.rect.top = enemy.spawn_y
 
     # Update everything on this level
     def update(self, player):
