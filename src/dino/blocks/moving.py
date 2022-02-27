@@ -55,6 +55,14 @@ class MovingBlock(BasicBlock):
             else:
                 level.player.rect.top = self.rect.bottom
 
+        # Check if player is on top
+        self.rect.y -= 2
+        hit = pygame.sprite.collide_rect(self, level.player)
+        self.rect.y += 2
+        if hit:
+            level.player.rect.x += self.change_x
+            level.player.rect.y += self.change_y
+
         # Check the boundaries and see if we need to reverse
         # direction.
         cur_y = self.rect.y - level.world_shift_y
@@ -64,5 +72,4 @@ class MovingBlock(BasicBlock):
         cur_x = self.rect.x - level.world_shift_x
         if  cur_x < self.boundary_left or cur_x > self.boundary_right:
             self.change_x *= -1
-            
 
