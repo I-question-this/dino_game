@@ -2,7 +2,7 @@
 
 # Attributions
 ## Code
-We started with a basic 2D Platform Jumper example from (https://demching.itch.io/dino-family)[programarcadegames.com]
+We started with a basic 2D Platform Jumper example from [https://demching.itch.io/dino-family](programarcadegames.com)
 
 ## Assets
-+ (https://arks.itch.io/dino-characters)[Dino Characters]
++ [https://arks.itch.io/dino-characters](Dino Characters)
