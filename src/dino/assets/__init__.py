@@ -43,3 +43,27 @@ BASIC_BLOCK_FILES = {
 DIRT_BLOCK_FILES = [
     os.path.join(SPRITES_DIR, "Tiles/tile_0122.png")
 ]
+
+BACKGROUNDS_SKY = [
+    os.path.join(SPRITES_DIR, "Backgrounds/background_0000.png"),
+    os.path.join(SPRITES_DIR, "Backgrounds/background_0001.png"),
+    os.path.join(SPRITES_DIR, "Backgrounds/background_0002.png"),
+]
+
+BACKGROUNDS_DESERT = [    
+    os.path.join(SPRITES_DIR, "Backgrounds/background_0003.png"),
+    os.path.join(SPRITES_DIR, "Backgrounds/background_0004.png"),
+    os.path.join(SPRITES_DIR, "Backgrounds/background_0005.png")
+]
+
+BACKGROUNDS_SNOW = [
+    os.path.join(SPRITES_DIR, "Backgrounds/background_0006.png"),
+    os.path.join(SPRITES_DIR, "Backgrounds/background_0007.png"),
+    os.path.join(SPRITES_DIR, "Backgrounds/background_0008.png"),
+]
+
+BACKGROUNDS_JUNGLE = [    
+    os.path.join(SPRITES_DIR, "Backgrounds/background_0009.png"),
+    os.path.join(SPRITES_DIR, "Backgrounds/background_0010.png"),
+    os.path.join(SPRITES_DIR, "Backgrounds/background_0011.png")
+]

@@ -1,4 +1,5 @@
 include src/dino/assets/sprites/*.png
 include src/dino/assets/sprites/Tiles/*.png
+include src/dino/assets/sprites/Backgrounds/*.png
 include src/dino/assets/levels/*.json
 include src/dino/assets/levels/*.lvl
