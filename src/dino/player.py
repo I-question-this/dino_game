@@ -1,7 +1,6 @@
 import pygame
-from dino.assets import DINO_DOUX
+from dino.assets.sprites.dinos import DINO_DOUX_FRAMES
 from dino.blocks.death import DeathBlock
-from dino.spritesheet import SpriteSheet
 
 
 class Player(pygame.sprite.Sprite):
@@ -27,15 +26,8 @@ class Player(pygame.sprite.Sprite):
 
         # List of all the frames for the little dino
         # Load the sprite sheet image and extract images; (x, y, width, height)
-        sprite_sheet = SpriteSheet(DINO_DOUX, width, height)
-        self.frames = []
-        for i in range(0, 10):
-            # Get the image from the sprite sheet
-            image = sprite_sheet.get_image((i*24)+4, 4, 15, 18)
-            # Scale the image up
-            image = sprite_sheet.transform_image(image)
-            # Add the image to the list of frames
-            self.frames.append(image)
+        sprite_sheet = DINO_DOUX_FRAMES(width, height)
+        self.frames = sprite_sheet.frames
 
         # Set direction
         self.direction = 'R' # Faces 'R'ight or 'L'eft

@@ -1,6 +1,5 @@
 import pygame
-from dino.assets import DINO_BART
-from dino.spritesheet import SpriteSheet
+from dino.assets.sprites.dinos import DINO_BART_FRAMES
 
 # TODO SWITCH DIRECTION NOT JUST WHEN FALLING BUT ALSO WHEN COLLIDING IN X DIR
 
@@ -23,15 +22,8 @@ class Enemy(pygame.sprite.Sprite):
 
         # List of all the frames for the little dino
         # Load the sprite sheet image and extract images; (x, y, width, height)
-        sprite_sheet = SpriteSheet(DINO_BART, width, height)
-        self.frames = []
-        for i in range(3, 10):
-            # Get the image from the sprite sheet 
-            image = sprite_sheet.get_image((i*24)+4, 4, 15, 18)
-            # Scale the image up
-            image = sprite_sheet.transform_image(image)
-            # Add the image to the list of frames
-            self.frames.append(image)
+        sprite_sheet = DINO_BART_FRAMES(width, height)
+        self.frames = sprite_sheet.frames
 
         # Set direction
         self.direction = 'L' # Faces 'R'ight or 'L'eft
