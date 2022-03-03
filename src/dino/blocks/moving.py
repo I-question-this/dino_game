@@ -66,10 +66,18 @@ class MovingBlock(BasicBlock):
         # Check the boundaries and see if we need to reverse
         # direction.
         cur_y = self.rect.y - level.world_shift_y
-        if  cur_y < self.boundary_top or cur_y > self.boundary_bottom:
+        if  cur_y < self.boundary_top:
+            self.rect.y = self.boundary_top + level.world_shift_y
+            self.change_y *= -1
+        if  cur_y > self.boundary_bottom:
+            self.rect.y = self.boundary_bottom + level.world_shift_y
             self.change_y *= -1
 
         cur_x = self.rect.x - level.world_shift_x
-        if  cur_x < self.boundary_left or cur_x > self.boundary_right:
+        if  cur_x < self.boundary_left:
+            self.rect.x = self.boundary_left + level.world_shift_x
+            self.change_x *= -1
+        if  cur_x > self.boundary_right:
+            self.rect.x = self.boundary_right + level.world_shift_x
             self.change_x *= -1
 
